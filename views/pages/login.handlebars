@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hello Bulma!</title>
+   <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">   --> 
+   <link rel="stylesheet" href="../css/index.css">
+  </head>
+  <body>
+    <div class="loginContainer is-centered loginForm">
+      <h1>USER LOGIN </h1>
+      <form id="loginForm" class="is-centered " method="post" enctype="multipart/form-data">
+        <p>username or email: </p>
+        <label for="usernameOrEmail"></label>
+          <input type="text" name="usernameOrEmail" id="usernameOrEmail" class="input"><br>
+
+          <p>passwords: </p>
+        <label for="password"></label>
+          <input type="password" name="password" id="password" class="input"><br>
+
+        <button type="submit" class="button  is-rounded"> login</button>
+
+
+      </form>
+      
+    </div>
+  <script src="../scripts/login.js"></script>
+  </body>
+</html>
