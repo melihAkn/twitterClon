@@ -38,27 +38,27 @@ const userSchema = new Schema({
         required : true
     },
     followed : {
-        type : [String],
+        type : [Object],
         default : []
     },
     followers : {
-        type : [String],
+        type : [Object],
         default : []
 
     },
     likedJitters : {
-        type : [String],
+        type : [Object],
         required : false,
         default : []
 
     },
     repostedJitters : {
-        type : [String],
+        type : [Object],
         required : false,
         default : []
     },
     publishedJitters:{
-        type : [String],
+        type : [Object],
         required : false,
         default : []
     }

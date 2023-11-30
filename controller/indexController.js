@@ -22,7 +22,7 @@ const login = async(req,res) => {
     try {
         const userToken = await userModel.login(req.body.username,req.body.password);
         console.log("token " + userToken);
-        res.cookie('userToken',userToken,{maxAge : 3600000,httpOnly: true, path: '/user',secure : false});
+        res.cookie('userToken',userToken,{maxAge : 3600000,httpOnly: true, path: '/',secure : false});
         res.redirect('/');
     } catch (error) {
         res.render('./pages/login', {message : error});
