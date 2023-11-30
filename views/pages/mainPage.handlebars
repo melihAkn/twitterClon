@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Twitter Clone</title>
+    <link rel="stylesheet" href="../css/index.css">
+    
+    <style>
+body {
+  width: 100%;
+  float: left;
+}
+
+.firstBlanArea
+{
+  width: 10%;
+  float: left;
+  height: 100px;
+  
+}
+
+.userActions
+{
+  width: 15%;
+  float: left;
+  height: 100px;
+  
+}
+
+.tweetAndTimeline
+{
+  width: 50%;
+  float: left;
+  height: 100px;
+  
+}
+
+.suggestedUsers
+{
+  width: 15%;
+  float: left;
+  height: 100px;
+  
+}
+
+.lastBlankArea
+{
+  width: 10%;
+  float: left;
+  height: 100px;
+  
+}
+.mainPageHref{
+    float: left;
+}
+.followersTweetHref{
+    float: right;
+}
+    </style>
+</head>
+<body>
+    <!--this is first section to be blank because page partition have to work  -->
+    <section class="firstBlanArea"></section>
+    <section id="user-actions " class="userActions">
+        <a href="#" class="is-medium">Ana Sayfa</a><br>
+        <a href="#">Keşfet</a><br>
+        <a href="#">Profil</a><br>
+    </section>
+
+    <section id="tweet-section " class="tweetAndTimeline" >
+        <a href="" class="mainPageHref">main page</a> 
+        <a href="" class="followersTweetHref">followed users tweet</a>
+        <div id="tweet-box">
+            <textarea class="textarea" id="tweet" placeholder="everything can be discussed"></textarea>
+            <button class="button" id="sendTweetButton">Tweet At</button>
+        </div>
+<div id="timeline">
+                    <div class="card">
+  <div class="card-content">
+    <div class="media">
+      <div class="media-left">
+        <figure class="image is-48x48">
+          <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
+        </figure>
+      </div>
+      <div class="media-content">
+        <p class="title is-4">John Smith</p>
+        <p class="subtitle is-6">@johnsmith</p>
+      </div>
+    </div>
+
+    <div class="content">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+      Phasellus nec iaculis mauris. <a>@bulmaio</a>.
+      <a href="#">#css</a> <a href="#">#responsive</a>
+      <br>
+
+     <div>
+      
+            <p class="buttons">
+  <button class="button is-small">
+    <p>like</p>
+  </button>
+    <button class="button is-small">
+    <p>comment</p>
+  </button>
+    <button class="button is-small">
+    <p>reTweet</p>
+  </button>
+   
+  <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
+</p>
+</div>
+  </div>
+
+</div>
+        </div><!--card finish there -->
+</div>
+
+
+
+
+    </section>
+
+    <section id="suggested-users " class="suggestedUsers" style="margin-left: 30px;">
+        <a>suggested users</a>
+    </section>
+<!-- this is last section to be blank because page partition have to work   -->
+    <section class="lastBlankArea"></section>
+
+
+
+    <script src="../scripts/mainPage.js"></script>
+</body>
+</html>

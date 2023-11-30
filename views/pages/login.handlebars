@@ -10,20 +10,20 @@
   <body>
     <div class="loginContainer is-centered loginForm">
       <h1>USER LOGIN </h1>
-      <form id="loginForm" class="is-centered " method="post" enctype="multipart/form-data">
+      <form id="loginForm" class="is-centered " method="post" >
         <p>username or email: </p>
-        <label for="usernameOrEmail"></label>
-          <input type="text" name="usernameOrEmail" id="usernameOrEmail" class="input"><br>
+        <label for="username"></label>
+          <input type="text" name="username" id="username" class="input"><br>
 
           <p>passwords: </p>
         <label for="password"></label>
           <input type="password" name="password" id="password" class="input"><br>
 
         <button type="submit" class="button  is-rounded"> login</button>
-
+        <a href="/register" class="link">not have account click to sign up</a>
 
       </form>
-      
+      {{{message}}}
     </div>
   <script src="../scripts/login.js"></script>
   </body>
