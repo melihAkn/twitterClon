@@ -22,14 +22,12 @@ const getUserToken =async _ => {
 const sendTweetButton = document.getElementById('sendTweetButton');
 
 const getJitters = _ => {
-    const getAllTweetsURL = "/user/getAllJitters"
-    const timeline = document.getElementById('timeline')
-    console.log(timeline)
+    const getAllTweetsURL = "/user/getAllJitters";
+    const timeline = document.getElementById('timeline');
     fetch(getAllTweetsURL)
     .then(response => response.json())
     .then(data => {
-        console.log(data)
-        timeline.innerHTML = ""
+        timeline.innerHTML = "";
         data.forEach(jitterData => {
             timeline.innerHTML += `
             <div class="card">
@@ -51,14 +49,14 @@ const getJitters = _ => {
          <div>
           
                 <p class="buttons">
-      <button class="button is-small">
-        <p>like </p>  ${jitterData.repostCount}
+      <button class="button is-small likeButton" id="likeButton">
+        <p>like ${jitterData.likeCount}</p>  
       </button>
-        <button class="button is-small">
-        <p>comment </p> ${jitterData.likeCount}
+        <button class="button is-small commentButton" id="commentButton">
+        <p>comment ${jitterData.jitterComment.length}</p> 
       </button>
-        <button class="button is-small">
-        <p>reTweet </p> ${" "+jitterData.jitterComment.length}
+        <button class="button is-small reJitterButton" id="reJitterButton">
+        <p>reJitter  ${jitterData.repostCount}</p>
       </button>
        
       <time datetime="2016-1-1"> ${jitterData.createdAt}</time>
@@ -71,13 +69,68 @@ const getJitters = _ => {
     <br>
             `  
         });
+    })
+    .then( _ => {
+        const likeButton = document.querySelectorAll('.likeButton');
+        const commentButton = document.querySelectorAll('.commentButton');
+        const rejitterButton = document.querySelectorAll('.reJitterButton');
+        likeButton.forEach(likeButtons => {
+            likeButtons.addEventListener('click',_ => {
+                //jitter text have many spaces then delete it 
+                let jitterTextArray = likeButtons.parentElement.parentElement.parentElement.childNodes[0].nodeValue.split(' ')
+                for (let e = 0; e < 12; e++) {
+                    jitterTextArray.shift()
+                    if(e <=8){
+                        jitterTextArray.pop()
+                    }
+                }
+                let jitterText = jitterTextArray.join(" ").replace('\n','')
+                let jitterOwnerUsername = likeButtons.parentElement.parentElement.parentElement.parentElement.childNodes[1].children[1].children[1].firstChild.nodeValue.replace('@','')
+                let jitterJSON = {
+                    jitterText,
+                    jitterOwnerUsername
+                }
+                const likeButtonURL = "/user/likeAndUnlikeJitter"
+                fetch(likeButtonURL,{
+                    method : "POST",
+                    headers : {
+                        "Content-Type": "application/json",
+                    },
+                    body : JSON.stringify(jitterJSON)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data)
+                    getJitters()
+                })
+                .catch(e => console.log(e))
+            })
+        })
+       /*
+        commentButton.addEventListener('click', _ => {
+
+
+
+        })
+
+
+        rejitterButton.addEventListener('click', _ => {
         
-    }).catch(e => console.log(e))
+        
+        
+        })
+*/
+
+
+
+
+    })
+    .catch(e => console.log(e))
 
 }
 
 const sendJitter = _ => {
-const tweet = document.getElementById('tweet').value;
+const tweet = document.getElementById('tweet');
 const sendTweetURL = "/user/publishJitter";
 console.log(tweet);
     fetch(sendTweetURL,{
@@ -85,11 +138,12 @@ console.log(tweet);
         headers: {
             "Content-Type": "application/json",
         },
-        body : JSON.stringify({tweet : tweet})
+        body : JSON.stringify({tweet : tweet.value})
 })
     .then(response => response.json())
     .then(data => {
         console.log(data)
+        tweet.value = ""
         getJitters()
     }).catch(e => console.log(e))
 

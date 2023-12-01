@@ -6,20 +6,21 @@ const jitterSchema = new Schema ({
     jitterTextContent : {
         type : String,
         minLength : 1,
-        maxlength : 150,
+        maxlength : 500,
         require : true,
+        unique : true
     },
     likeCount : {
-        type : String,
+        type : Number,
         minLength : 1,
         maxlength : 10,
-        default : "0"
+        default : 0
     },
     repostCount : {
-        type : String,
+        type : Number,
         minLength : 1,
         maxlength : 10,
-        default : "0"
+        default : 0
     },
     jitterComment : {
         type : [Object],

@@ -49,13 +49,79 @@ const publishJitter = async (req,res) => {
         tweets.ownerOfJitterUsername = userFind.username
         const addJitter = new jittersModel(tweets)
         await addJitter.save()
-
         res.status(200).send({message : "tweet has added succesfully"});
     } catch (error) {
         res.status(500).send(error)
         console.log(error)
     }
 }
+
+const likeAndUnlikeJitter = async(req,res) => {
+    let responseMessage = {
+        message : ""
+    }
+    const jitter = {
+        jitterTextContent : req.body.jitterText,
+        ownerOfJitterUsername : req.body.jitterOwnerUsername
+    };
+    try {
+    
+        const token = req.cookies.userToken;
+        const tokenIsValid = verify(token,userSecretKey);
+        //console.log(req.body);
+
+        const findUser = await userModel.findOne({username : req.body.jitterOwnerUsername});
+
+        findUser.likedJitters.forEach(async e => {
+            let userLikedJitterArray = []
+            if(jitter.jitterTextContent === e .jitterTextContent && jitter.ownerOfJitterUsername === e.ownerOfJitterUsername){
+            }else{
+                userLikedJitterArray.push(e)
+            }
+            if(jitter.jitterTextContent === e .jitterTextContent && jitter.ownerOfJitterUsername === e.ownerOfJitterUsername){
+                userModel.collection.updateOne(
+                    { _id: findUser._id },
+                    { $set: { likedJitters: [] } } 
+            );
+                userModel.collection.updateOne(
+                { _id: findUser._id }, 
+                { $set: { likedJitters: userLikedJitterArray } } 
+              );
+                const findJitter = await jittersModel.findOne(jitter)
+                findJitter.likeCount -=1
+                await findJitter.save()
+                responseMessage.message = "jitter has unliked"
+            }else{
+                findUser.likedJitters.push(jitter);
+                await findUser.save();
+        
+                const findJitter = await jittersModel.findOne(jitter);
+                findJitter.likeCount +=1;
+                
+                findJitter.save();
+                responseMessage.message = "jitter has liked"
+         
+            }
+        })
+        if (findUser.likedJitters.length == 0){
+            findUser.likedJitters.push(jitter);
+            await findUser.save();
+    
+            const findJitter = await jittersModel.findOne(jitter);
+            findJitter.likeCount +=1;
+            
+            findJitter.save();
+            responseMessage.message = "jitter has liked"
+        }
+
+        console.log(responseMessage)
+        res.status(200).send(responseMessage);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
 
 const logout = (req,res) => {
     try {
@@ -70,5 +136,6 @@ module.exports = {
     getUserToken,
     publishJitter,
     getAllJitters,
-    logout
+    logout,
+    likeAndUnlikeJitter
 }
