@@ -56,70 +56,66 @@ const publishJitter = async (req,res) => {
     }
 }
 
-const likeAndUnlikeJitter = async(req,res) => {
+const likeAndUnlikeJitter = async (req, res) => {
     let responseMessage = {
-        message : ""
-    }
-    const jitter = {
-        jitterTextContent : req.body.jitterText,
-        ownerOfJitterUsername : req.body.jitterOwnerUsername
+        message: ""
     };
+
+    const jitter = {
+        jitterTextContent: req.body.jitterText,
+        ownerOfJitterUsername: req.body.jitterOwnerUsername
+    };
+
     try {
-    
         const token = req.cookies.userToken;
-        const tokenIsValid = verify(token,userSecretKey);
-        //console.log(req.body);
+        const tokenIsValid = verify(token, userSecretKey);
 
-        const findUser = await userModel.findOne({username : req.body.jitterOwnerUsername});
+        const findUser = await userModel.findOne({ username: req.body.jitterOwnerUsername });
 
-        findUser.likedJitters.forEach(async e => {
-            let userLikedJitterArray = []
-            if(jitter.jitterTextContent === e .jitterTextContent && jitter.ownerOfJitterUsername === e.ownerOfJitterUsername){
-            }else{
-                userLikedJitterArray.push(e)
+        const userLikedJitterArray = [];
+
+        findUser.likedJitters.forEach((e) => {
+            if (jitter.jitterTextContent === e.jitterTextContent && jitter.ownerOfJitterUsername === e.ownerOfJitterUsername) {
+                userLikedJitterArray.push(e);
             }
-            if(jitter.jitterTextContent === e .jitterTextContent && jitter.ownerOfJitterUsername === e.ownerOfJitterUsername){
-                userModel.collection.updateOne(
-                    { _id: findUser._id },
-                    { $set: { likedJitters: [] } } 
+        });
+
+        if (userLikedJitterArray.length > 0) {
+            // Kullanıcının beğendiği jitter zaten varsa, onu silelim
+            await userModel.updateOne(
+                { _id: findUser._id },
+                { $pull: { likedJitters: { jitterTextContent: jitter.jitterTextContent, ownerOfJitterUsername: jitter.ownerOfJitterUsername } } }
             );
-                userModel.collection.updateOne(
-                { _id: findUser._id }, 
-                { $set: { likedJitters: userLikedJitterArray } } 
-              );
-                const findJitter = await jittersModel.findOne(jitter)
-                findJitter.likeCount -=1
-                await findJitter.save()
-                responseMessage.message = "jitter has unliked"
-            }else{
-                findUser.likedJitters.push(jitter);
-                await findUser.save();
-        
-                const findJitter = await jittersModel.findOne(jitter);
-                findJitter.likeCount +=1;
-                
-                findJitter.save();
-                responseMessage.message = "jitter has liked"
-         
+
+            const findJitter = await jittersModel.findOne(jitter);
+            if (findJitter) {
+                findJitter.likeCount -= 1;
+                await findJitter.save();
             }
-        })
-        if (findUser.likedJitters.length == 0){
+
+            responseMessage.message = "jitter has unliked";
+        } else {
+            // Kullanıcının beğendiği jitter yoksa, ekleyelim
             findUser.likedJitters.push(jitter);
             await findUser.save();
-    
+
             const findJitter = await jittersModel.findOne(jitter);
-            findJitter.likeCount +=1;
-            
-            findJitter.save();
-            responseMessage.message = "jitter has liked"
+            if (findJitter) {
+                findJitter.likeCount += 1;
+                await findJitter.save();
+            }
+
+            responseMessage.message = "jitter has liked";
         }
 
-        console.log(responseMessage)
+        console.log(responseMessage);
         res.status(200).send(responseMessage);
     } catch (error) {
         console.log(error);
+        res.status(500).send({ message: "Internal Server Error" });
     }
-}
+};
+
 
 
 
