@@ -32,6 +32,7 @@ const getJitters = _ => {
             timeline.innerHTML += `
             <div class="card">
       <div class="card-content">
+      <button type = "button" class="followButton" id="followButton"> follow </button>
         <div class="media">
           <div class="media-left">
             <figure class="image is-48x48">
@@ -74,9 +75,63 @@ const getJitters = _ => {
         const likeButton = document.querySelectorAll('.likeButton');
         const commentButton = document.querySelectorAll('.commentButton');
         const rejitterButton = document.querySelectorAll('.reJitterButton');
+        const followButton = document.querySelectorAll('.followButton');
+        const unfollowButton = document.getElementById('unfollow');
+        console.log(followButton)
+        followButton.forEach(followButtons => {
+            followButtons.addEventListener('click', _ => {
+                const followUserURL = "/user/followUser"
+                const username = followButtons.parentElement.childNodes[3].children[1].children[1].firstChild.nodeValue.replace('@','')
+                const followedUser = {
+                    username
+                }
+                        if (followButtons.classList.contains('unfollow')) {
+                            //unfollow 
+                            const unfollowURL = '/user/unfollowUser'
+                            fetch(unfollowURL,{
+                                method : 'POST',
+                                headers : {
+                                    "Content-Type": "application/json",
+                                },
+                                body : JSON.stringify(followedUser)
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                console.log(data)
+                            })
+
+                            followButtons.textContent = "follow";
+                            followButtons.classList.remove('unfollow');
+                        } else {
+                            //follow
+                            const followURL = '/user/followUser'
+                            fetch(followURL,{
+                                method : 'POST',
+                                headers : {
+                                    "Content-Type": "application/json",
+                                },
+                                body : JSON.stringify(followedUser)
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                console.log(data)
+                            })
+
+                            followButtons.textContent = "followed";
+                            followButtons.classList.add('unfollow');
+                        }
+                        console.log(followButtons);
+            })
+
+
+        })
+   
+        
+
         likeButton.forEach(likeButtons => {
             likeButtons.addEventListener('click',_ => {
                 //jitter text have many spaces then delete it 
+                
                 let jitterTextArray = likeButtons.parentElement.parentElement.parentElement.childNodes[0].nodeValue.split(' ')
                 for (let e = 0; e < 12; e++) {
                     jitterTextArray.shift()
@@ -85,7 +140,7 @@ const getJitters = _ => {
                     }
                 }
                 let jitterText = jitterTextArray.join(" ").replace('\n','')
-                let jitterOwnerUsername = likeButtons.parentElement.parentElement.parentElement.parentElement.childNodes[1].children[1].children[1].firstChild.nodeValue.replace('@','')
+                let jitterOwnerUsername = likeButtons.parentElement.parentElement.parentElement.parentElement.childNodes[3].children[1].children[1].firstChild.nodeValue.replace('@','')
                 let jitterJSON = {
                     jitterText,
                     jitterOwnerUsername

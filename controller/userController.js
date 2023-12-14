@@ -81,7 +81,6 @@ const likeAndUnlikeJitter = async (req, res) => {
         });
 
         if (userLikedJitterArray.length > 0) {
-            // Kullanıcının beğendiği jitter zaten varsa, onu silelim
             await userModel.updateOne(
                 { _id: findUser._id },
                 { $pull: { likedJitters: { jitterTextContent: jitter.jitterTextContent, ownerOfJitterUsername: jitter.ownerOfJitterUsername } } }
@@ -95,7 +94,6 @@ const likeAndUnlikeJitter = async (req, res) => {
 
             responseMessage.message = "jitter has unliked";
         } else {
-            // Kullanıcının beğendiği jitter yoksa, ekleyelim
             findUser.likedJitters.push(jitter);
             await findUser.save();
 
@@ -116,8 +114,56 @@ const likeAndUnlikeJitter = async (req, res) => {
     }
 };
 
+const userFollow = async (req,res) => {
+    try {
+        //if user is followed all the belove code shouldnt work
+        console.log(req.body)
+        const token = req.cookies.userToken;
+        const tokenIsValid = verify(token,userSecretKey);
+        //wants to follow
+        const wantsToFollowUser = await userModel.findById(tokenIsValid.id)
+        wantsToFollowUser.followed.push({username : req.body.username})
+        wantsToFollowUser.save()
+        const beingFollowedUser = await userModel.findOne({username : req.body.username})
+        beingFollowedUser.followers.push({username : wantsToFollowUser.username})
+        beingFollowedUser.save()
+        
+
+        res.status(200).send({message : "user followed"})
+    } catch (error) {
+        res.status(500).send(error)
+    }
 
 
+
+}
+
+const unfollowUser = async(req,res) => {
+    try {
+        console.log(req.body)
+        const token = req.cookies.userToken;
+        const tokenIsValid = verify(token,userSecretKey);
+        //user to unfollow
+        const wantsToUnfollowedUser = await userModel.findOne({username : req.body.username})
+        //user who wants to unfollow
+        const wantsToUnfollowUser = await userModel.findById(tokenIsValid.id)
+        
+        await userModel.updateOne(
+            { _id: tokenIsValid.id },
+            { $pull: { followed: { username: req.body.username } } }
+        );
+        
+        await userModel.updateOne(
+            { _id: wantsToUnfollowedUser._id },
+            { $pull: { followers: { username: wantsToUnfollowUser.username } } }
+        );
+
+        res.send({message : 'maybe this works'})
+    } catch (error) {
+        res.status(500).send(error)
+    }
+
+}
 
 const logout = (req,res) => {
     try {
@@ -133,5 +179,8 @@ module.exports = {
     publishJitter,
     getAllJitters,
     logout,
-    likeAndUnlikeJitter
+    likeAndUnlikeJitter,
+    userFollow,
+    unfollowUser
+    
 }
