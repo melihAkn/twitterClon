@@ -1,4 +1,5 @@
 const userModel = require('../model/userModel');
+const jitterModel = require('../model/jittersModel');
 const {hash,compare} = require('bcrypt');
 const {verify} = require('jsonwebtoken');
 require('dotenv').config();
@@ -13,9 +14,15 @@ const registerPage = (req,res) => {
 };
 
 const mainPage = (req,res) => {
-    res.render('./pages/mainPage')
+    res.render('./pages/mainPage');
 }
 
+const jitterPage = (req,res) => {
+    res.render('./pages/jitterPage');
+
+
+
+}
 
 const login = async(req,res) => {
     console.log(req.body);
@@ -52,10 +59,23 @@ const register = async(req,res) => {
 
 };
 
+const getCommentID = async(req,res) => {
+    try {
+        const findJitter = await jitterModel.findOne({ownerOfJitterUsername : req.body.jitterOwnerUsername , jitterTextContent : req.body.jitterTextContent })
+        res.status(200).send({jitterId : findJitter.id})
+    } catch (error) {
+        res.status(500).send(error)
+    }
+    
+
+
+}
 module.exports = {
     loginPage,
     registerPage,
     login,
     register,
     mainPage,
+    getCommentID,
+    jitterPage
 }

@@ -122,14 +122,21 @@ const userFollow = async (req,res) => {
         const tokenIsValid = verify(token,userSecretKey);
         //wants to follow
         const wantsToFollowUser = await userModel.findById(tokenIsValid.id)
+        const ifExists =  wantsToFollowUser.followed.some(followed => followed.username === req.body.username);
+        //if user already followed requested user dont follow again
+        if(ifExists || wantsToFollowUser.username == req.body.username){
+            res.send({message : `you can't follow yourself or user already followed`})
+        }else{
         wantsToFollowUser.followed.push({username : req.body.username})
         wantsToFollowUser.save()
         const beingFollowedUser = await userModel.findOne({username : req.body.username})
         beingFollowedUser.followers.push({username : wantsToFollowUser.username})
         beingFollowedUser.save()
-        
 
         res.status(200).send({message : "user followed"})
+        }
+
+        
     } catch (error) {
         res.status(500).send(error)
     }
@@ -163,6 +170,21 @@ const unfollowUser = async(req,res) => {
         res.status(500).send(error)
     }
 
+}
+
+const addComment = async(req,res) => {
+
+}
+
+const updateComment = async(req,res) => {
+
+
+}
+
+const deleteComment = async(req,res) => {
+
+
+    
 }
 
 const logout = (req,res) => {
