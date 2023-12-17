@@ -8,12 +8,12 @@ require('dotenv').config();
 //router files
 const indexRouter = require('./routes/indexRouter');
 const userRouter = require('./routes/userRouter');
+//controller
 const jitter = express();
 jitter.use(express.static('public'));
 jitter.use(express.urlencoded({extended:true}));
 jitter.use(express.json());
 jitter.use(cookieParser());
-
 
 //template engine
 jitter.engine('handlebars', expHbs.engine());

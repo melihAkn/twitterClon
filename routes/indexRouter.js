@@ -15,6 +15,6 @@ indexRouter.post('/login',controller.login);
 indexRouter.post('/register',controller.register);
 
 indexRouter.get('/jitter/:username/:jitterId',controller.jitterPage)
-indexRouter.get('/jitter/wdwdwd',controller.jitterPage)
+indexRouter.post('/jitter/commentData',controller.getCommentData)
 indexRouter.post('/comments/getId',controller.getCommentID)
 module.exports = indexRouter;

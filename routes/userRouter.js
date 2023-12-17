@@ -10,5 +10,9 @@ userRouter.post('/likeAndUnlikeJitter',controller.likeAndUnlikeJitter)
 
 userRouter.post('/followUser',controller.userFollow)
 userRouter.post('/unfollowUser',controller.unfollowUser)
+
+userRouter.post('/addComment',controller.addComment)
+
+
 userRouter.get('/logout',controller.logout);
 module.exports = userRouter;

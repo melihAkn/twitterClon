@@ -70,6 +70,20 @@ const getCommentID = async(req,res) => {
 
 
 }
+
+const getCommentData = async(req,res) => {
+    try {
+        const jitter = await jitterModel.findById(req.body.url)
+        res.status(200).send(jitter)
+    } catch (error) {
+        res.status(500).send({error})
+    }
+   
+
+
+
+
+}
 module.exports = {
     loginPage,
     registerPage,
@@ -77,5 +91,6 @@ module.exports = {
     register,
     mainPage,
     getCommentID,
-    jitterPage
+    jitterPage,
+    getCommentData
 }

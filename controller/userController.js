@@ -173,6 +173,27 @@ const unfollowUser = async(req,res) => {
 }
 
 const addComment = async(req,res) => {
+    try {
+        console.log(req.body)
+        const token = req.cookies.userToken
+        const tokenIsValid = verify(token,userSecretKey);
+        //comment owner
+        const findUser = await userModel.findById(tokenIsValid.id)
+        //comment data
+        const comment = {
+            ownerOfCommnet : findUser.username,
+            commnetText : req.body.comment
+        }
+        //add comment
+        const findJitter = await jittersModel.findById(req.body.jitterId)
+        findJitter.jitterComment.push(comment)
+        findJitter.save()
+
+        res.status(200).send({message : 'comment added succesfully'}) 
+    } catch (error) {
+        console.error(error)
+        res.status(500).send({error})
+    }
 
 }
 
@@ -203,6 +224,7 @@ module.exports = {
     logout,
     likeAndUnlikeJitter,
     userFollow,
-    unfollowUser
+    unfollowUser,
+    addComment
     
 }

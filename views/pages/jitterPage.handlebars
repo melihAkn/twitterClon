@@ -62,25 +62,27 @@ body {
 .followersTweetHref{
     float: right;
 }
+.addComment {
+  width: 250px;
+}
     </style>
 </head>
 <body>
     <!--this is first section to be blank because page partition have to work  -->
     <section class="firstBlanArea"></section>
     <section id="user-actions " class="userActions">
-        <a href="#" class="is-medium">Ana Sayfa</a><br>
+        <a href="/" class="is-medium">Ana Sayfa</a><br>
         <a href="#">Keşfet</a><br>
         <a href="#">Profil</a><br>
         <a href="#" id="logout">logout</a><br>
     </section>
 
-    <section id="tweet-section " class="tweetAndTimeline" >
-        <a href="" class="mainPageHref">main page</a> 
-        <a href="" class="followersTweetHref">followed users tweet</a>
-        <div id="tweet-box">
-            <textarea class="textarea" id="tweet" placeholder="everything can be discussed"></textarea>
-            <button class="button" id="sendTweetButton">Tweet At</button>
+    <section id="comment-Section " class="tweetAndTimeline" >
+
+        <div id="comment-box">
+
         </div>
+  
 <div id="timeline">
 
 </div>
@@ -89,6 +91,11 @@ body {
 
 
     </section>
+
+
+
+
+
 
     <section id="suggested-users " class="suggestedUsers" style="margin-left: 30px;">
         <a>suggested users</a>
