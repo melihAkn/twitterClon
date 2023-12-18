@@ -31,6 +31,31 @@ const getAllJitters = async(req,res) => {
     }
 }
 
+const followedUsersJitters = async (req,res) => {
+    /*
+    const token = req.cookies.userToken;
+    try {
+        const tokenVerify = verify(token,userSecretKey);
+        const userFind = await userModel.findById(tokenVerify.id);
+        console.log(userFind)
+        
+        for (let i = 0; i < userFollowed.length; i++) {
+            const findingJitter = await jittersModel.find({ownerOfJitterUsername : userFollowed[i]});
+            jitters.push(findingJitter);
+        };
+
+    } catch (error) {
+        console.error(error)
+    }
+
+    */
+    res.send('')
+
+
+
+
+}
+
 const publishJitter = async (req,res) => {
     try {
         const token = req.cookies.userToken;
@@ -113,6 +138,46 @@ const likeAndUnlikeJitter = async (req, res) => {
         res.status(500).send({ message: "Internal Server Error" });
     }
 };
+const rejitter = async (req,res) => {
+    const jitter = {
+        jitterText : req.body.rejitterTweetText,
+        username : req.body.rejitterTweetUsername
+    }
+    console.log(jitter)
+    console.log(req.body)
+    const token = req.cookies.userToken
+    try {
+        const tokenFind = verify(token,userSecretKey)
+        const jitterFind = await jittersModel.findOne({jitterTextContent : jitter.jitterText , ownerOfJitterUsername : jitter.username})
+        const findUser = await userModel.findById(tokenFind.id)
+        const JitterExists =  findUser.repostedJitters.some(rejitter => rejitter.jitterText === jitter.jitterText && rejitter.username === jitter.username)
+        if(JitterExists){
+            res.send({message : "you are already rejitter this tweet",rejittered : false})
+        }else{
+            findUser.repostedJitters.push(jitter)
+            await findUser.save()
+            jitterFind.repostCount +=1
+            jitterFind.save()
+            res.status(200).send({message : 'jitter rejitted',rejittered : true})
+        }
+
+    } catch (error) {
+        console.error(error)
+        res.status(500).send({error})
+    }
+}
+
+const removeRejitter = (req,res) => {
+
+    try {
+        
+    } catch (error) {
+        
+    }
+
+
+
+}
 
 const userFollow = async (req,res) => {
     try {
@@ -124,9 +189,12 @@ const userFollow = async (req,res) => {
         const wantsToFollowUser = await userModel.findById(tokenIsValid.id)
         const ifExists =  wantsToFollowUser.followed.some(followed => followed.username === req.body.username);
         //if user already followed requested user dont follow again
-        if(ifExists || wantsToFollowUser.username == req.body.username){
-            res.send({message : `you can't follow yourself or user already followed`})
-        }else{
+        if(ifExists){
+            res.send({message :"user already followed"})
+        }else if(wantsToFollowUser.username == req.body.username){
+            res.send({message : `you can't follow yourself `})
+        }
+        else{
         wantsToFollowUser.followed.push({username : req.body.username})
         wantsToFollowUser.save()
         const beingFollowedUser = await userModel.findOne({username : req.body.username})
@@ -135,7 +203,6 @@ const userFollow = async (req,res) => {
 
         res.status(200).send({message : "user followed"})
         }
-
         
     } catch (error) {
         res.status(500).send(error)
@@ -225,6 +292,9 @@ module.exports = {
     likeAndUnlikeJitter,
     userFollow,
     unfollowUser,
-    addComment
+    addComment,
+    rejitter,
+    removeRejitter,
+    followedUsersJitters
     
 }

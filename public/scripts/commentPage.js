@@ -21,7 +21,6 @@ const getCommentData = async _ => {
         commentBox.innerHTML = `
             <div class="card">
       <div class="card-content">
-      <button type = "button" class="followButton" id="followButton"> follow </button>
         <div class="media">
           <div class="media-left">
             <figure class="image is-48x48">
@@ -39,13 +38,13 @@ const getCommentData = async _ => {
          <div>
           
                 <p class="buttons">
-      <button class="button is-small likeButton" id="likeButton">
+      <button type="button" class="button is-small likeButton" id="likeButton" disabled>
         <p>like ${data.likeCount}</p>  
       </button>
-        <button class="button is-small commentButton" id="commentButton">
+        <button type="button" class="button is-small commentButton" id="commentButton" disabled>
         <p>comment ${data.jitterComment.length}</p> 
       </button>
-        <button class="button is-small reJitterButton" id="reJitterButton">
+        <button type="button" class="button is-small reJitterButton" id="reJitterButton" disabled>
         <p>reJitter  ${data.repostCount}</p>
       </button>
 
@@ -115,7 +114,6 @@ const getCommentData = async _ => {
 
             <div class="card">
             <div class="card-content">
-            <button type = "button" class="followButton" id="followButton"> follow </button>
               <div class="media">
                 <div class="media-left">
                   <figure class="image is-48x48">
@@ -139,7 +137,7 @@ const getCommentData = async _ => {
             <button class="button is-small likeButton" id="likeButton">
               <p>like ${data.likeCount}</p>  
             </button>
-              <button class="button is-small commentButton" id="commentButton">
+              <button type = "button"  class="button is-small commentButton" id="commentButton" >
               <p>comment ${data.jitterComment.length}</p> 
             </button>
               <button class="button is-small reJitterButton" id="reJitterButton">

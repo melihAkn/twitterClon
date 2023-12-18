@@ -1,5 +1,7 @@
 const getUserTokenURL = "/user/getUserToken";
 let token;
+//redirecting user if login credentials are wrong
+//because some times in backend res.redirect('/) doesn't work I dont know why
 const getUserToken =async _ => {
     fetch(getUserTokenURL)
     .then(response => {
@@ -191,11 +193,47 @@ const getJitters = _ => {
                 .catch(e => console.log(e))
             })
         })
-/*
-        rejitterButton.addEventListener('click', _ => {
-        
-        })
-*/
+        rejitterButton.forEach(rejitterButtons => {
+            rejitterButtons.addEventListener('click', _ => {
+                const rejiiterButtonURL = "/user/rejitter";
+
+                let jitterTextArray = rejitterButtons.parentElement.parentElement.parentElement.childNodes[0].nodeValue.split(' ')
+                for (let e = 0; e < 12; e++) {
+                    jitterTextArray.shift()
+                    if(e <=8){
+                        jitterTextArray.pop()
+                    }
+                }
+                let rejitterTweetText = jitterTextArray.join(" ").replace('\n','')
+                let rejitterTweetUsername = rejitterButtons.parentElement.parentElement.parentElement.parentElement.childNodes[3].children[1].children[1].firstChild.nodeValue.replace('@','')
+                let jitterJSON = {
+                    rejitterTweetText,
+                    rejitterTweetUsername
+                }
+                console.log(jitterJSON)
+                   //add rejitter
+                   fetch(rejiiterButtonURL,{
+                    method : "POST",
+                    headers : {
+                        "Content-Type": "application/json",
+                    },
+                    body : JSON.stringify(jitterJSON)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data)
+                    //add to classlist rejitter
+                    rejitterButtons.classList.add('rejitter');
+                    getJitters()
+                    if(data.rejittered){
+                   
+                    }else{
+                        alert(data.message)
+                    }
+                })
+                .catch(e => console.log(e))
+            })
+        });
     })
     .catch(e => console.log(e))
 }
@@ -217,6 +255,27 @@ const sendTweetURL = "/user/publishJitter";
     }).catch(e => console.log(e))
 
 }
+
+
+const followedUsersJitterLink = document.getElementById('followedUserJitters')
+const followedUsersJitters = _ => {
+console.log("aaaa")
+    const followedUsersJittersURL = "/user/followedUsersJitters"
+    fetch(followedUsersJittersURL)
+    .then(response => response.json())
+    .then(data => {
+
+    })
+    .catch(e => console.log(e))
+}
+followedUsersJitterLink.addEventListener('click',followedUsersJitters)
+
+
+
+
+
+
+
 const logoutLink = document.getElementById('logout')
 const logout = _ => {
     const logoutURL = "/user/logout"
