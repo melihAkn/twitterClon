@@ -20,12 +20,13 @@ const getUserToken =async _ => {
     })
     .catch(e => console.log(e));
 }
-
+const getAllTweetsURL = "/user/getAllJitters";
 const sendTweetButton = document.getElementById('sendTweetButton');
-const getJitters = _ => {
-    const getAllTweetsURL = "/user/getAllJitters";
+const getJitters = (url = "/user/getAllJitters") => {
+    getAllTweetOrUserFollowedTweets = "/user/getAllJitters"
+    console.log(url)
     const timeline = document.getElementById('timeline');
-    fetch(getAllTweetsURL)
+    fetch(url)
     .then(response => response.json())
     .then(data => {
         timeline.innerHTML = "";
@@ -79,7 +80,6 @@ const getJitters = _ => {
         const followButton = document.querySelectorAll('.followButton');
         followButton.forEach(followButtons => {
             followButtons.addEventListener('click', _ => {
-                const followUserURL = "/user/followUser"
                 const username = followButtons.parentElement.childNodes[3].children[1].children[1].firstChild.nodeValue.replace('@','')
                 const followedUser = {
                     username
@@ -96,7 +96,6 @@ const getJitters = _ => {
                             })
                             .then(response => response.json())
                             .then(data => {
-                                console.log(data)
                             })
 
                             followButtons.textContent = "follow";
@@ -113,7 +112,6 @@ const getJitters = _ => {
                             })
                             .then(response => response.json())
                             .then(data => {
-                                console.log(data)
                                 if(data.message == "user followed"){
                                     followButtons.textContent = "followed";
                                     followButtons.classList.add('unfollow');
@@ -152,7 +150,6 @@ const getJitters = _ => {
                 })
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data)
                     getJitters()
                 })
                 .catch(e => console.log(e))
@@ -186,7 +183,6 @@ const getJitters = _ => {
                 })
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data)
                     window.location.href = `/jitter/${jitter.jitterOwnerUsername}/${data.jitterId}`
                     
                 })
@@ -210,7 +206,6 @@ const getJitters = _ => {
                     rejitterTweetText,
                     rejitterTweetUsername
                 }
-                console.log(jitterJSON)
                    //add rejitter
                    fetch(rejiiterButtonURL,{
                     method : "POST",
@@ -221,7 +216,6 @@ const getJitters = _ => {
                 })
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data)
                     //add to classlist rejitter
                     rejitterButtons.classList.add('rejitter');
                     getJitters()
@@ -249,7 +243,6 @@ const sendTweetURL = "/user/publishJitter";
 })
     .then(response => response.json())
     .then(data => {
-        console.log(data)
         tweet.value = ""
         getJitters()
     }).catch(e => console.log(e))
@@ -259,29 +252,22 @@ const sendTweetURL = "/user/publishJitter";
 
 const followedUsersJitterLink = document.getElementById('followedUserJitters')
 const followedUsersJitters = _ => {
-console.log("aaaa")
     const followedUsersJittersURL = "/user/followedUsersJitters"
     fetch(followedUsersJittersURL)
     .then(response => response.json())
     .then(data => {
-
+        console.log(data)
+        getJitters("/user/followedUsersJitters")
     })
     .catch(e => console.log(e))
 }
 followedUsersJitterLink.addEventListener('click',followedUsersJitters)
-
-
-
-
-
-
 
 const logoutLink = document.getElementById('logout')
 const logout = _ => {
     const logoutURL = "/user/logout"
     fetch(logoutURL)
     .then(response => {
-        console.log(response);
 
         if (response.ok) {
             return response.json();
@@ -290,7 +276,6 @@ const logout = _ => {
         throw new Error("Logout failed");
     })
     .then(data => {
-        console.log(data);
         window.location.href = "/login";
     })
     .catch(e => console.log(e));
@@ -301,8 +286,9 @@ sendTweetButton.addEventListener('click',sendJitter);
 logoutLink.addEventListener('click',logout)
 
 document.addEventListener('DOMContentLoaded',async function(){
-    await getUserToken();
-    getJitters()
+    await getUserToken()
+    const getAllTweetsURL = "/user/getAllJitters"; // Set your API endpoint here
+    getJitters(getAllTweetsURL);
 
 
 });

@@ -32,29 +32,30 @@ const getAllJitters = async(req,res) => {
 }
 
 const followedUsersJitters = async (req,res) => {
-    /*
+    
     const token = req.cookies.userToken;
     try {
+        const followedUsers = []
+        const followedUsersJitter = []
         const tokenVerify = verify(token,userSecretKey);
         const userFind = await userModel.findById(tokenVerify.id);
-        console.log(userFind)
-        
-        for (let i = 0; i < userFollowed.length; i++) {
-            const findingJitter = await jittersModel.find({ownerOfJitterUsername : userFollowed[i]});
-            jitters.push(findingJitter);
+        const findFollowedUsers = userFind.followed.forEach(e => {
+            followedUsers.push(e.username)
+        })
+        console.log(followedUsers)
+        for (let i = 0; i < followedUsers.length; i++) {
+            const findingJitter = await jittersModel.find({ownerOfJitterUsername : followedUsers[i]});
+            findingJitter.forEach(e => {
+                followedUsersJitter.push(e);
+            })
         };
-
+        console.log(followedUsersJitter)
+        res.send(followedUsersJitter)
     } catch (error) {
         console.error(error)
     }
-
-    */
-    res.send('')
-
-
-
-
 }
+//username jitterTextArray jitterOwnerUsername
 
 const publishJitter = async (req,res) => {
     try {
@@ -90,7 +91,7 @@ const likeAndUnlikeJitter = async (req, res) => {
         jitterTextContent: req.body.jitterText,
         ownerOfJitterUsername: req.body.jitterOwnerUsername
     };
-
+    console.log(jitter)
     try {
         const token = req.cookies.userToken;
         const tokenIsValid = verify(token, userSecretKey);
@@ -143,8 +144,6 @@ const rejitter = async (req,res) => {
         jitterText : req.body.rejitterTweetText,
         username : req.body.rejitterTweetUsername
     }
-    console.log(jitter)
-    console.log(req.body)
     const token = req.cookies.userToken
     try {
         const tokenFind = verify(token,userSecretKey)
