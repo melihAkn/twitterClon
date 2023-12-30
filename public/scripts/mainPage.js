@@ -249,14 +249,12 @@ const sendTweetURL = "/user/publishJitter";
 
 }
 
-
 const followedUsersJitterLink = document.getElementById('followedUserJitters')
 const followedUsersJitters = _ => {
     const followedUsersJittersURL = "/user/followedUsersJitters"
     fetch(followedUsersJittersURL)
     .then(response => response.json())
     .then(data => {
-        console.log(data)
         getJitters("/user/followedUsersJitters")
     })
     .catch(e => console.log(e))
@@ -289,6 +287,4 @@ document.addEventListener('DOMContentLoaded',async function(){
     await getUserToken()
     const getAllTweetsURL = "/user/getAllJitters"; // Set your API endpoint here
     getJitters(getAllTweetsURL);
-
-
 });
