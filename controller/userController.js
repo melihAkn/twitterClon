@@ -4,6 +4,10 @@ const {verify} = require('jsonwebtoken');
 require('dotenv').config();
 const userSecretKey = process.env.JWT_USER_SECRET_KEY;
 
+const profilePageRender = (req,res) => {
+    
+    res.render('./pages/userProfilePage')
+}
 
 const getUserToken = (req,res) => {
     try {
@@ -151,7 +155,7 @@ const rejitter = async (req,res) => {
         const findUser = await userModel.findById(tokenFind.id)
         const JitterExists =  findUser.repostedJitters.some(rejitter => rejitter.jitterText === jitter.jitterText && rejitter.username === jitter.username)
         if(JitterExists){
-            res.send({message : "you are already rejitter this tweet",rejittered : false})
+            res.send({message : "you are already rejitter this jitter or if you want to remove rejittered list go to profile page",rejittered : false})
         }else{
             findUser.repostedJitters.push(jitter)
             await findUser.save()
@@ -273,6 +277,39 @@ const deleteComment = async(req,res) => {
 
     
 }
+const getUsername = async(req,res) => {
+    try {
+        const token = req.cookies.userToken
+        const tokenVerify = verify(token,userSecretKey)
+        const userFind = await userModel.findById(tokenVerify.id)
+        res.status(200).send({username : userFind.username})
+    } catch (error) {
+       res.status(500).send({error}) 
+    }
+}
+
+const profilePage = async(req,res) => {
+
+    try {
+        const token = req.cookies.userToken;
+        const tokenIsValid = verify(token,userSecretKey);
+
+
+
+
+
+
+
+    } catch (error) {
+        
+    }
+
+
+
+
+}
+
+
 
 const logout = (req,res) => {
     try {
@@ -284,6 +321,7 @@ const logout = (req,res) => {
     
 }
 module.exports = {
+    profilePageRender,
     getUserToken,
     publishJitter,
     getAllJitters,
@@ -294,6 +332,7 @@ module.exports = {
     addComment,
     rejitter,
     removeRejitter,
-    followedUsersJitters
+    followedUsersJitters,
+    getUsername
     
 }

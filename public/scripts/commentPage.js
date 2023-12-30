@@ -1,9 +1,13 @@
-const url = document.URL.replace('http://localhost:3000/jitter/deneme/','')
+//http://localhost:3000/jitter/linuxDeneme/659068da5b20f7ed5344aaec"
 
+const splitURL = document.URL.split("/");
+const url = splitURL[5]
+console.log(url)
 const getCommentData = async _ => {
     const commentId = {
         url
     }
+    console.log(commentId)
     const getCommentDataURL = "/jitter/commentData";
     const commentBox = document.getElementById('comment-box');
     fetch(getCommentDataURL,{
@@ -16,6 +20,7 @@ const getCommentData = async _ => {
     })
     .then(response => response.json())
     .then(data => {
+      console.log(data)
         //getting jitter data
         commentBox.innerHTML = "";
         commentBox.innerHTML = `

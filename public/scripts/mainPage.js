@@ -232,7 +232,13 @@ const getJitters = (url = "/user/getAllJitters") => {
     .catch(e => console.log(e))
 }
 const sendJitter = _ => {
+    
 const tweet = document.getElementById('tweet');
+if(tweet.value == ""){
+    alert('jitter content cant be empty')
+}else{
+
+
 const sendTweetURL = "/user/publishJitter";
     fetch(sendTweetURL,{
         method : "POST",
@@ -246,6 +252,7 @@ const sendTweetURL = "/user/publishJitter";
         tweet.value = ""
         getJitters()
     }).catch(e => console.log(e))
+}//else statement finish here
 
 }
 
@@ -278,13 +285,27 @@ const logout = _ => {
     })
     .catch(e => console.log(e));
 }
+const userProfilePageLİnk = document.getElementById('userProfile')
+userProfilePage = _ => {
+    fetch('/user/username')
+    .then(response => response.json())
+    .then(data => {
+        console.log(data)
+        window.location.href = `/user/profile/${data.username}`
+    })
+    .catch(error => {
+        console.log(error)
+    })
 
+
+}
+userProfilePageLİnk.addEventListener('click',userProfilePage)
 sendTweetButton.addEventListener('click',sendJitter);
 
 logoutLink.addEventListener('click',logout)
 
 document.addEventListener('DOMContentLoaded',async function(){
     await getUserToken()
-    const getAllTweetsURL = "/user/getAllJitters"; // Set your API endpoint here
+    const getAllTweetsURL = "/user/getAllJitters";
     getJitters(getAllTweetsURL);
 });

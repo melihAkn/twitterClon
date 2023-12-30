@@ -24,6 +24,8 @@ const jitterPage = (req,res) => {
 
 }
 
+
+
 const login = async(req,res) => {
     console.log(req.body);
     try {
@@ -72,6 +74,7 @@ const getCommentID = async(req,res) => {
 }
 
 const getCommentData = async(req,res) => {
+    console.log(req.body)
     try {
         const jitter = await jitterModel.findById(req.body.url)
         res.status(200).send(jitter)
