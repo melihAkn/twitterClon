@@ -5,12 +5,16 @@ const userRouter = Router();
 userRouter.get('/username',controller.getUsername)
 userRouter.get('/getUserToken',controller.getUserToken);
 userRouter.get('/profile/:username',controller.profilePageRender);
-
+userRouter.get('/getUserInfos',controller.getUserInfos)
 
 userRouter.post('/publishJitter',controller.publishJitter);
 
 userRouter.get('/getAllJitters',controller.getAllJitters);
 userRouter.get('/followedUsersJitters',controller.followedUsersJitters);
+
+
+
+userRouter.post('/getUserRejitteredJitters',controller.getUserRejitteredJitters);
 
 userRouter.post('/likeAndUnlikeJitter',controller.likeAndUnlikeJitter);
 

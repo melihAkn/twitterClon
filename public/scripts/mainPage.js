@@ -24,7 +24,6 @@ const getAllTweetsURL = "/user/getAllJitters";
 const sendTweetButton = document.getElementById('sendTweetButton');
 const getJitters = (url = "/user/getAllJitters") => {
     getAllTweetOrUserFollowedTweets = "/user/getAllJitters"
-    console.log(url)
     const timeline = document.getElementById('timeline');
     fetch(url)
     .then(response => response.json())
@@ -290,7 +289,6 @@ userProfilePage = _ => {
     fetch('/user/username')
     .then(response => response.json())
     .then(data => {
-        console.log(data)
         window.location.href = `/user/profile/${data.username}`
     })
     .catch(error => {

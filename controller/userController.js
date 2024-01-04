@@ -288,27 +288,45 @@ const getUsername = async(req,res) => {
     }
 }
 
-const profilePage = async(req,res) => {
+const getUserInfos = async(req,res) => {
 
     try {
         const token = req.cookies.userToken;
         const tokenIsValid = verify(token,userSecretKey);
-
-
-
-
-
-
+        const userFind = await userModel.findById(tokenIsValid.id)
+        .select("-_id -email -password -phoneNumber -createdAt -updatedAt -__v")
+        
+        res.status(200).send(userFind)
 
     } catch (error) {
-        
+        console.log(error)
+        res.send({error})
     }
-
-
-
-
 }
 
+const getUserRejitteredJitters = async (req,res) => {
+    try {
+        const token = req.cookies.userToken;
+        const tokenIsValid = verify(token,userSecretKey);
+        console.log(req.body)
+        const rejitteredJitters = []
+        for (const data of req.body) {
+            const findRejitters = await jittersModel.find({
+              jitterTextContent: data.jitterText,
+              ownerOfJitterUsername: data.username
+            })
+            .select("-_id -createdAt -updatedAt -__v")
+            rejitteredJitters.push(findRejitters[0]);
+          }
+          console.log(rejitteredJitters)
+        res.status(200).send(rejitteredJitters)
+    } catch (error) {
+        console.log(error)
+        res.status(500).send(error)
+    }
+ 
+
+}
 
 
 const logout = (req,res) => {
@@ -333,6 +351,8 @@ module.exports = {
     rejitter,
     removeRejitter,
     followedUsersJitters,
-    getUsername
+    getUsername,
+    getUserInfos,
+    getUserRejitteredJitters
     
 }
