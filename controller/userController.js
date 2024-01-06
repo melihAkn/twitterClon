@@ -289,7 +289,6 @@ const getUsername = async(req,res) => {
 }
 
 const getUserInfos = async(req,res) => {
-
     try {
         const token = req.cookies.userToken;
         const tokenIsValid = verify(token,userSecretKey);
@@ -297,7 +296,6 @@ const getUserInfos = async(req,res) => {
         .select("-_id -email -password -phoneNumber -createdAt -updatedAt -__v")
         
         res.status(200).send(userFind)
-
     } catch (error) {
         console.log(error)
         res.send({error})
@@ -324,10 +322,66 @@ const getUserRejitteredJitters = async (req,res) => {
         console.log(error)
         res.status(500).send(error)
     }
- 
+}
+
+const getUserLikedJitters = async (req,res) => {
+    try {
+        const token = req.cookies.userToken;
+        const tokenIsValid = verify(token,userSecretKey);
+        console.log(req.body)
+        const likedJitters = []
+        for (const data of req.body) {
+            const findLiked = await jittersModel.find({
+              jitterTextContent: data.jitterTextContent,
+              ownerOfJitterUsername: data.ownerOfJitterUsername
+            })
+        .select("-_id -createdAt -updatedAt -__v")
+        likedJitters.push(findLiked[0])
+    }
+    console.log(likedJitters)
+    res.status(200).send(likedJitters)
+
+    } catch (error) {
+        console.log(error)
+        res.status(500).send(error) 
+    }
+}
+
+const getUserFollowedUsers = async (req,res) => {
+    try {
+        const token = req.cookies.userToken
+        const tokenVerify = verify(token,userSecretKey)
+        const userFollowedUsers = []
+        console.log(req.body)
+        for (const data of req.body) {
+            const findUser = await userModel.find({
+              username: data.username,
+            })
+        .select("-_id -password -email -phoneNumber -dateOfBirth -likedJitters -repostedJitters -publishedJitters -createdAt -updatedAt -__v")
+        userFollowedUsers.push(findUser[0])
+    }
+    console.log(userFollowedUsers)
+    res.status(200).send(userFollowedUsers)
+
+    } catch (error) {
+        res.status(500).send(error)
+    }
+
 
 }
 
+const getUserFollowerUsers = async (req,res) => {
+    try {
+        
+
+
+
+    } catch (error) {
+        
+    }
+
+
+}
 
 const logout = (req,res) => {
     try {
@@ -353,6 +407,9 @@ module.exports = {
     followedUsersJitters,
     getUsername,
     getUserInfos,
-    getUserRejitteredJitters
+    getUserRejitteredJitters,
+    getUserLikedJitters,
+    getUserFollowedUsers,
+    getUserFollowerUsers
     
 }

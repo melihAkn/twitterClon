@@ -15,7 +15,10 @@ userRouter.get('/followedUsersJitters',controller.followedUsersJitters);
 
 
 userRouter.post('/getUserRejitteredJitters',controller.getUserRejitteredJitters);
+userRouter.post('/getUserLikedJitters',controller.getUserLikedJitters)
 
+userRouter.post('/getUserFollowedUsers',controller.getUserFollowedUsers)
+userRouter.post('/getUserFollowerUsers',controller.getUserFollowedUsers)
 userRouter.post('/likeAndUnlikeJitter',controller.likeAndUnlikeJitter);
 
 userRouter.post('/followUser',controller.userFollow);
