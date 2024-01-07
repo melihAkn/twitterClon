@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 require('dotenv').config();
 const userSecretKey = process.env.JWT_USER_SECRET_KEY;
-const {sign} = require('jsonwebtoken')
-const {compare} = require('bcrypt')
-const Schema =  mongoose.Schema
+const {sign} = require('jsonwebtoken');
+const {compare} = require('bcrypt');
+const Schema =  mongoose.Schema;
 const userSchema = new Schema({
 
     username : {
@@ -71,10 +71,10 @@ const userSchema = new Schema({
 
 userSchema.methods.generateToken =async (id) => {
     try {
-        const userToken = sign(id,userSecretKey)
-        return userToken    
+        const userToken = sign(id,userSecretKey);
+        return userToken;
     } catch (error) {
-        return error
+        return error;
     }
     
 }

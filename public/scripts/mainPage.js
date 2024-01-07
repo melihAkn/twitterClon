@@ -285,7 +285,7 @@ const logout = _ => {
     .catch(e => console.log(e));
 }
 const userProfilePageLİnk = document.getElementById('userProfile')
-userProfilePage = _ => {
+const userProfilePage = _ => {
     fetch('/user/username')
     .then(response => response.json())
     .then(data => {

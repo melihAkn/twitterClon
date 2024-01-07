@@ -193,7 +193,7 @@ const getUserInfos = async _ => {
                           <button class="button is-small commentButton" id="commentButton" disabled>
                           <p>comment ${repostedJitterData.jitterComment.length}</p> 
                         </button>
-                          <button class="button is-small reJitterButton" id="reJitterButton" disabled>
+                          <button class="button is-small reJitterButton" class="reJitterButton" id="reJitterButton">
                           <p>reJitter  ${repostedJitterData.repostCount}</p>
                         </button>
                          
@@ -208,6 +208,36 @@ const getUserInfos = async _ => {
 
                     })
                    
+                })
+                .then(_ => {
+                  const removeRejiiterButtonURL = "/user/removeRejitter";
+                  const rejitterButtons = document.querySelectorAll('.reJitterButton')
+                  rejitterButtons.forEach(rejitterButton => {
+                    rejitterButton.addEventListener('click', _ => {
+                      //getting jitter text and owner username
+                      let jitterTextArray = rejitterButton.parentElement.parentElement.parentElement.childNodes[0].textContent.trim()
+                      let rejitterTweetUsername = rejitterButton.parentElement.parentElement.parentElement.parentElement.parentElement.childNodes[1].childNodes[1].childNodes[3].children[1].textContent.replace('@','')
+                      let jitterJSON = {
+                          jitterTextArray,
+                          rejitterTweetUsername
+                      }
+                      console.log(jitterJSON)
+                      fetch(removeRejiiterButtonURL,{
+                        method : "POST",
+                        headers : {
+                          "Content-Type": "application/json"
+                        },
+                        body : JSON.stringify(jitterJSON)
+                      })
+                      .then(response => response.json())
+                      .then(data => {
+                        console.log(data)
+                      })
+                      .catch(e => console.log(e))
+
+                    })
+                  })
+
                 })
                 .catch(e => console.log(e))
 
@@ -331,6 +361,28 @@ const getUserInfos = async _ => {
     })
     .catch(e => console.error(e))
 }
+
+const logoutLink = document.getElementById('logout')
+const logout = _ => {
+    const logoutURL = "/user/logout"
+    fetch(logoutURL)
+    .then(response => {
+
+        if (response.ok) {
+            return response.json();
+        }
+
+        throw new Error("Logout failed");
+    })
+    .then(data => {
+        window.location.href = "/login";
+    })
+    .catch(e => console.log(e));
+}
+logoutLink.addEventListener('click',logout)
+
+
+
 document.addEventListener('DOMContentLoaded',async  _ => {
     await getUserInfos()
 

@@ -171,7 +171,24 @@ const getCommentData = async _ => {
     
     })
 }
+const logoutLink = document.getElementById('logout')
+const logout = _ => {
+    const logoutURL = "/user/logout"
+    fetch(logoutURL)
+    .then(response => {
 
+        if (response.ok) {
+            return response.json();
+        }
+
+        throw new Error("Logout failed");
+    })
+    .then(data => {
+        window.location.href = "/login";
+    })
+    .catch(e => console.log(e));
+}
+logoutLink.addEventListener('click',logout)
 
 
 document.addEventListener('DOMContentLoaded',async function (){
