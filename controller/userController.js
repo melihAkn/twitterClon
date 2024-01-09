@@ -33,7 +33,7 @@ const getAllJitters = async(req,res) => {
     } catch (error) {
         res.status(500).send(error);
     }
-}
+};
 
 const followedUsersJitters = async (req,res) => {
     
@@ -57,8 +57,7 @@ const followedUsersJitters = async (req,res) => {
     } catch (error) {
         console.error(error)
     }
-}
-//username jitterTextArray jitterOwnerUsername
+};
 
 const publishJitter = async (req,res) => {
     try {
@@ -83,7 +82,7 @@ const publishJitter = async (req,res) => {
         res.status(500).send(error);
         console.log(error);
     }
-}
+};
 
 const likeAndUnlikeJitter = async (req, res) => {
     let responseMessage = {
@@ -154,7 +153,7 @@ const rejitter = async (req,res) => {
         const findUser = await userModel.findById(tokenFind.id);
         const JitterExists =  findUser.repostedJitters.some(rejitter => rejitter.jitterText === jitter.jitterText && rejitter.username === jitter.username);
         if(JitterExists){
-            res.send({message : "you are already rejitter this jitter or if you want to remove rejittered list go to profile page",rejittered : false});
+            res.send({message : "you are already rejitter this jitter if you want to remove rejittered list go to profile page",rejittered : false});
         }else{
             findUser.repostedJitters.push(jitter);
             await findUser.save();
@@ -167,20 +166,32 @@ const rejitter = async (req,res) => {
         console.error(error);
         res.status(500).send({error});
     }
-}
+};
 
-const removeRejitter = (req,res) => {
+const removeRejitter = async (req,res) => {
     console.log(req.body)
-    res.send()
     try {
-        
+        const token = req.cookies.userToken;
+        const tokenFind = verify(token,userSecretKey);
+        const findUser = await userModel.findById(tokenFind.id)
+        findUser.repostedJitters.pull()
+        await userModel.updateOne(
+            { _id: findUser._id },
+            { $pull: { repostedJitters: { jitterText: req.body.jitterTextArray, username: req.body.rejitterTweetUsername }}}
+        );
+        const findJitter = await jittersModel.find({jitterTextContent : req.body.jitterTextArray , ownerOfJitterUsername : req.body.rejitterTweetUsername})
+        console.log(findJitter)
+        findJitter[0].repostCount -=1
+        await findJitter[0].save();
+        res.status(200).send({message : "jitter rejittered"})
     } catch (error) {
-        
+        console.log(error)
+        res.status(500).send({error : error})
     }
 
 
 
-}
+};
 
 const userFollow = async (req,res) => {
     try {
@@ -213,7 +224,7 @@ const userFollow = async (req,res) => {
 
 
 
-}
+};
 
 const unfollowUser = async(req,res) => {
     try {
@@ -240,7 +251,7 @@ const unfollowUser = async(req,res) => {
         res.status(500).send(error);
     }
 
-}
+};
 
 const addComment = async(req,res) => {
     try {
@@ -265,12 +276,12 @@ const addComment = async(req,res) => {
         res.status(500).send({error});
     }
 
-}
+};
 
 const updateComment = async(req,res) => {
 
 
-}
+};
 
 const deleteComment = async(req,res) => {
 
@@ -286,7 +297,7 @@ const getUsername = async(req,res) => {
     } catch (error) {
        res.status(500).send({error});
     }
-}
+};
 
 const getUserInfos = async(req,res) => {
     try {
@@ -300,7 +311,7 @@ const getUserInfos = async(req,res) => {
         console.log(error);
         res.send({error});
     }
-}
+};
 
 const getUserRejitteredJitters = async (req,res) => {
     try {
@@ -321,7 +332,7 @@ const getUserRejitteredJitters = async (req,res) => {
         console.log(error);
         res.status(500).send(error);
     }
-}
+};
 
 const getUserLikedJitters = async (req,res) => {
     try {
@@ -343,7 +354,7 @@ const getUserLikedJitters = async (req,res) => {
         console.log(error);
         res.status(500).send(error);
     }
-}
+};
 
 const getUserFollowedUsers = async (req,res) => {
     try {
@@ -366,7 +377,7 @@ const getUserFollowedUsers = async (req,res) => {
     }
 
 
-}
+};
 
 
 
@@ -378,7 +389,7 @@ const logout = (req,res) => {
         console.log(error);
     }
     
-}
+};
 module.exports = {
     profilePageRender,
     getUserToken,
@@ -398,4 +409,4 @@ module.exports = {
     getUserLikedJitters,
     getUserFollowedUsers,
     
-}
+};

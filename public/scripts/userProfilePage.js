@@ -24,13 +24,13 @@ const getUserInfos = async _ => {
           </div>
           <div>
 
-            <button id="myJitters"> my jitters</button>
-            <button id="myLikedJitters"> liked jitters</button>
-            <button id="myRejitteredJitters"> rejittered jitters</button>
+            <button id="myJitters" class="button is-small"> my jitters</button>
+            <button id="myLikedJitters" class="button is-small"> liked jitters</button>
+            <button id="myRejitteredJitters" class="button is-small"> rejittered jitters</button>
             
 
-            <button id="followedUsers"> followed users</button>
-            <button id="followerUsers"> follower users</button>
+            <button id="followedUsers" class="button is-small"> followed users</button>
+            <button id="followerUsers" class="button is-small"> follower users</button>
   
           </div>
       </div>
@@ -232,6 +232,10 @@ const getUserInfos = async _ => {
                       .then(response => response.json())
                       .then(data => {
                         console.log(data)
+                        if(!data.error){
+                          window.location.reload()
+                        }
+                        
                       })
                       .catch(e => console.log(e))
 
@@ -276,7 +280,7 @@ const getUserInfos = async _ => {
                     <p>follower count: ${user.followers.length}</p>
                     <p>followed count: ${user.followed.length}</p>
                   </div>
-                  <input type="button" id="unfollowUser" class="unfollowUser" value="unfollow"></input>
+                  <input type="button" id="unfollowUser"class="button is-small unfollowUser" value="unfollow"></input>
                 </div>
                 
             </div>

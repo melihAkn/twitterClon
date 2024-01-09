@@ -33,7 +33,7 @@ const getJitters = (url = "/user/getAllJitters") => {
             timeline.innerHTML += `
             <div class="card">
       <div class="card-content">
-      <button type = "button" class="followButton" id="followButton"> follow </button>
+      <button type = "button" class="followButton button is-small" id="followButton"> follow </button>
         <div class="media">
           <div class="media-left">
             <figure class="image is-48x48">
