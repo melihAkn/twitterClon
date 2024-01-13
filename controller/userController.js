@@ -46,7 +46,6 @@ const followedUsersJitters = async (req,res) => {
         const findFollowedUsers = userFind.followed.forEach(e => {
             followedUsers.push(e.username);
         })
-        console.log(followedUsers);
         for (let i = 0; i < followedUsers.length; i++) {
             const findingJitter = await jittersModel.find({ownerOfJitterUsername : followedUsers[i]});
             findingJitter.forEach(e => {
@@ -93,7 +92,6 @@ const likeAndUnlikeJitter = async (req, res) => {
         jitterTextContent: req.body.jitterText,
         ownerOfJitterUsername: req.body.jitterOwnerUsername
     };
-    console.log(jitter)
     try {
         const token = req.cookies.userToken;
         const tokenIsValid = verify(token, userSecretKey);
@@ -134,7 +132,6 @@ const likeAndUnlikeJitter = async (req, res) => {
             responseMessage.message = "jitter has liked";
         }
 
-        console.log(responseMessage);
         res.status(200).send(responseMessage);
     } catch (error) {
         console.log(error);
@@ -169,7 +166,6 @@ const rejitter = async (req,res) => {
 };
 
 const removeRejitter = async (req,res) => {
-    console.log(req.body)
     try {
         const token = req.cookies.userToken;
         const tokenFind = verify(token,userSecretKey);
@@ -180,7 +176,6 @@ const removeRejitter = async (req,res) => {
             { $pull: { repostedJitters: { jitterText: req.body.jitterTextArray, username: req.body.rejitterTweetUsername }}}
         );
         const findJitter = await jittersModel.find({jitterTextContent : req.body.jitterTextArray , ownerOfJitterUsername : req.body.rejitterTweetUsername})
-        console.log(findJitter)
         findJitter[0].repostCount -=1
         await findJitter[0].save();
         res.status(200).send({message : "jitter rejittered"})
@@ -196,7 +191,6 @@ const removeRejitter = async (req,res) => {
 const userFollow = async (req,res) => {
     try {
         //if user is followed all the belove code shouldnt work
-        console.log(req.body);
         const token = req.cookies.userToken;
         const tokenIsValid = verify(token,userSecretKey);
         //wants to follow
@@ -317,7 +311,6 @@ const getUserRejitteredJitters = async (req,res) => {
     try {
         const token = req.cookies.userToken;
         const tokenIsValid = verify(token,userSecretKey);
-        console.log(req.body);
         const rejitteredJitters = [];
         for (const data of req.body) {
             const findRejitters = await jittersModel.find({
@@ -338,7 +331,6 @@ const getUserLikedJitters = async (req,res) => {
     try {
         const token = req.cookies.userToken;
         const tokenIsValid = verify(token,userSecretKey);
-        console.log(req.body);
         const likedJitters = [];
         for (const data of req.body) {
             const findLiked = await jittersModel.find({
