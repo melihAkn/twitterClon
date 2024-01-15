@@ -5,7 +5,8 @@ const userRouter = Router();
 userRouter.get('/username',controller.getUsername);
 userRouter.get('/getUserToken',controller.getUserToken);
 userRouter.get('/profile/:username',controller.profilePageRender);
-userRouter.get('/getUserInfos',controller.getUserInfos);
+//getting user infos
+userRouter.post('/getUserInfos',controller.getUserInfos);
 
 userRouter.post('/publishJitter',controller.publishJitter);
 

@@ -1,10 +1,16 @@
 const userProfileSection = document.getElementById('userProfileSection')
 const userJitterSection = document.getElementById('userJitterSection')
-
-
+const username = window.location.href.split('/').pop()
 const getUserInfos = async _ => {
+  const originalUsername = {username}
     const getUserInfosURL = "/user/getUserInfos"
-    fetch(getUserInfosURL)
+    fetch(getUserInfosURL,{
+      method : "POST",
+      headers : {
+        "Content-Type": "application/json",
+      },
+      body : JSON.stringify(originalUsername)
+    })
     .then(response => response.json())
     .then(data => {
         userProfileSection.innerHTML = `
@@ -205,13 +211,21 @@ const getUserInfos = async _ => {
                       </div><!--card finish there -->
                               
                     `
-
                     })
-                   
                 })
                 .then(_ => {
-                  const removeRejiiterButtonURL = "/user/removeRejitter";
                   const rejitterButtons = document.querySelectorAll('.reJitterButton')
+                  fetch("/user/username")
+                  .then(response => response.json())
+                  .then(data => {
+                    if(data.username !== username){
+                      rejitterButtons.forEach(e => {
+                        e.disabled = true
+                      })
+                    }
+                  })
+                  .catch(e => console.log(e))
+                  const removeRejiiterButtonURL = "/user/removeRejitter";
                   rejitterButtons.forEach(rejitterButton => {
                     rejitterButton.addEventListener('click', _ => {
                       //getting jitter text and owner username
@@ -290,30 +304,42 @@ const getUserInfos = async _ => {
         })
           .then(_ => {
             const unfollowButtons = document.querySelectorAll('.unfollowUser')
-            console.log(unfollowButtons)
-            unfollowButtons.forEach(unfollowButton => {
+            fetch("/user/username")
+            .then(response => response.json())
+            .then(data => {
+              if(data.username !== username){
+                unfollowButtons.forEach(e => {
+                  e.remove()
+                })
+              }else{
+                unfollowButtons.forEach(unfollowButton => {
               
-              unfollowButton.addEventListener('click', _ => {
-                const username = unfollowButton.parentElement.childNodes[3].childNodes[1].textContent
-                const usernameJSON = {
-                  username
-                }
-                const unfollowUserURL = "/user/unfollowUser"
-                fetch(unfollowUserURL,{
-                  method : "POST",
-                  headers : {
-                    "Content-Type" : "application/json"
-                  },
-                  body :JSON.stringify(usernameJSON)
+                  unfollowButton.addEventListener('click', _ => {
+                    const thisUserShouldBeUnfollow = unfollowButton.parentElement.childNodes[3].childNodes[1].textContent
+                    const usernameJSON = {
+                      thisUserShouldBeUnfollow,
+                      username
+                    }
+                    const unfollowUserURL = "/user/unfollowUser"
+                    fetch(unfollowUserURL,{
+                      method : "POST",
+                      headers : {
+                        "Content-Type" : "application/json"
+                      },
+                      body :JSON.stringify(usernameJSON)
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                      console.log(data)
+                      location.reload()
+                    })
+                    .catch(e => console.log(e))
+                  })
                 })
-                .then(response => response.json())
-                .then(data => {
-                  console.log(data)
-                  location.reload()
-                })
-                .catch(e => console.log(e))
-              })
+              }
             })
+            .catch(e => console.log(e))
+ 
           })
           
           .catch(e => console.log(e))

@@ -222,26 +222,29 @@ const userFollow = async (req,res) => {
 
 const unfollowUser = async(req,res) => {
     try {
+        console.log("unfollow user req body")
         console.log(req.body);
         const token = req.cookies.userToken;
         const tokenIsValid = verify(token,userSecretKey);
         //user to unfollow
-        const wantsToUnfollowedUser = await userModel.findOne({username : req.body.username});
+        const wantsToUnfollowedUser = await userModel.findOne({username : req.body.thisUserShouldBeUnfollow});
         //user who wants to unfollow
-        const wantsToUnfollowUser = await userModel.findById(tokenIsValid.id);
-        
+        const wantsToUnfollowUser = await userModel.find({username : req.body.username});
+        console.log(wantsToUnfollowedUser)
+        //user unfollow 
         await userModel.updateOne(
-            { _id: tokenIsValid.id },
-            { $pull: { followed: { username: req.body.username }}}
+            { _id: wantsToUnfollowUser[0]._id },
+            { $pull: { followed: { username: req.body.thisUserShouldBeUnfollow }}}
         );
-        
+        //unfollowed user followers list pull
         await userModel.updateOne(
             { _id: wantsToUnfollowedUser._id },
-            { $pull: { followers: { username: wantsToUnfollowUser.username } } }
+            { $pull: { followers: { username: wantsToUnfollowUser[0].username } } }
         );
 
         res.send({message : 'user unfollowed'});
     } catch (error) {
+        console.log(error)
         res.status(500).send(error);
     }
 
@@ -249,7 +252,6 @@ const unfollowUser = async(req,res) => {
 
 const addComment = async(req,res) => {
     try {
-        console.log(req.body);
         const token = req.cookies.userToken;
         const tokenIsValid = verify(token,userSecretKey);
         //comment owner
@@ -297,10 +299,10 @@ const getUserInfos = async(req,res) => {
     try {
         const token = req.cookies.userToken;
         const tokenIsValid = verify(token,userSecretKey);
-        const userFind = await userModel.findById(tokenIsValid.id)
+
+        const userFind = await userModel.find({username : req.body.username})
         .select("-_id -email -password -phoneNumber -createdAt -updatedAt -__v");
-        
-        res.status(200).send(userFind);
+        res.status(200).send(userFind[0]);
     } catch (error) {
         console.log(error);
         res.send({error});
