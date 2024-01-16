@@ -37,12 +37,15 @@ const getJitters = (url = "/user/getAllJitters") => {
         <div class="media">
           <div class="media-left">
             <figure class="image is-48x48">
-              <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
+              <img  class="userImage" src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
             </figure>
           </div>
+          
+
+
           <div class="media-content">
-            <p class="title is-4">${jitterData.ownerOfJitterUsername}</p>
-            <p class="subtitle is-6">@${jitterData.ownerOfJitterUsername}</p>
+            <p class="title is-4 jitterUsername">${jitterData.ownerOfJitterUsername}</p>
+            <p class="subtitle is-6 jitterUsernameButSpclChrt" >@${jitterData.ownerOfJitterUsername}</p>
           </div>
         </div>
     
@@ -77,6 +80,29 @@ const getJitters = (url = "/user/getAllJitters") => {
         const commentButton = document.querySelectorAll('.commentButton');
         const rejitterButton = document.querySelectorAll('.reJitterButton');
         const followButton = document.querySelectorAll('.followButton');
+        const userImages = document.querySelectorAll('.userImage')
+        const jitterUsernames = document.querySelectorAll('.jitterUsername')
+        const jitterUsernameButSpclChrts = document.querySelectorAll('.jitterUsernameButSpclChrt')
+   
+        userImages.forEach(userImage => {
+            userImage.addEventListener('click', function () {
+                let goProfilePage = userImage.parentElement.parentElement.parentElement.children[1].childNodes[1].textContent
+                window.location.href = `/user/profile/${goProfilePage}`
+            })
+        })
+        jitterUsernames.forEach(jitterUsername => {
+            jitterUsername.addEventListener('click', function () {
+                window.location.href = `/user/profile/${jitterUsername.textContent}`
+            })
+        })
+
+        jitterUsernameButSpclChrts.forEach(jitterUsernameButSpclChrt => {
+            const removeSpcCharecter = jitterUsernameButSpclChrt.textContent.replace('@','')
+            jitterUsernameButSpclChrt.addEventListener('click', function () {
+                window.location.href = `/user/profile/${removeSpcCharecter}`
+            })
+        })
+
         followButton.forEach(followButtons => {
             followButtons.addEventListener('click', _ => {
                 const username = followButtons.parentElement.childNodes[3].children[1].children[1].firstChild.nodeValue.replace('@','')

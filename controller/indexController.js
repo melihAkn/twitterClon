@@ -26,6 +26,7 @@ const jitterPage = (req,res) => {
 
 
 
+
 const login = async(req,res) => {
     console.log(req.body);
     try {
@@ -95,5 +96,5 @@ module.exports = {
     mainPage,
     getCommentID,
     jitterPage,
-    getCommentData
+    getCommentData,
 }

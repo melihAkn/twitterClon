@@ -62,6 +62,12 @@ body {
 .followersTweetHref{
     float: right;
 }
+
+.userImage:hover,
+.jitterUsername:hover,
+.jitterUsernameButSpclChrt:hover {
+  cursor: pointer;
+}
     </style>
 </head>
 <body>
@@ -69,13 +75,12 @@ body {
     <section class="firstBlanArea"></section>
     <section id="user-actions " class="userActions">
         <a href="/" class="is-medium">main page</a><br>
-        <a href="#">discover</a><br>
         <a href="#" id="userProfile">profile</a><br>
         <a href="#" id="logout">logout</a><br>
     </section>
 
     <section id="tweet-section " class="tweetAndTimeline" >
-        <a href="" class="mainPageHref">main page</a> 
+        <a href="" class="mainPageHref">discover Jitters</a> 
         <a  class="followersTweetHref" id="followedUserJitters">followed users tweet</a>
         <div id="tweet-box">
             <textarea class="textarea" id="tweet" placeholder="everything can be discussed"></textarea>

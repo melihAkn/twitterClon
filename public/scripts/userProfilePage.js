@@ -30,7 +30,7 @@ const getUserInfos = async _ => {
           </div>
           <div>
 
-            <button id="myJitters" class="button is-small"> my jitters</button>
+            <button id="myJitters" class="button is-small">jitters</button>
             <button id="myLikedJitters" class="button is-small"> liked jitters</button>
             <button id="myRejitteredJitters" class="button is-small"> rejittered jitters</button>
             
@@ -235,7 +235,6 @@ const getUserInfos = async _ => {
                           jitterTextArray,
                           rejitterTweetUsername
                       }
-                      console.log(jitterJSON)
                       fetch(removeRejiiterButtonURL,{
                         method : "POST",
                         headers : {
@@ -245,7 +244,6 @@ const getUserInfos = async _ => {
                       })
                       .then(response => response.json())
                       .then(data => {
-                        console.log(data)
                         if(!data.error){
                           window.location.reload()
                         }
@@ -276,7 +274,6 @@ const getUserInfos = async _ => {
           })
           .then(response => response.json())
           .then(data => {
-            console.log(data)
             data.forEach(user => {
                 
               userJitterSection.innerHTML += `
@@ -330,7 +327,6 @@ const getUserInfos = async _ => {
                     })
                     .then(response => response.json())
                     .then(data => {
-                      console.log(data)
                       location.reload()
                     })
                     .catch(e => console.log(e))
@@ -358,7 +354,6 @@ const getUserInfos = async _ => {
             })
             .then(response => response.json())
             .then(data => {
-              console.log(data)
               data.forEach(user => {
                 
                 userJitterSection.innerHTML += `
