@@ -26,7 +26,9 @@ const getUserInfos = async _ => {
               <p class="title is-4">${data.username}</p>
               <p>follower count: ${data.followers.length}</p>
               <p>followed count: ${data.followed.length}</p>
+              
             </div>
+            <input type = "button" value = "follow" id="followUser">
           </div>
           <div>
 
@@ -48,10 +50,35 @@ const getUserInfos = async _ => {
         const myJittersButton = document.getElementById('myJitters')
         const myLikedJittersJittersButton = document.getElementById('myLikedJitters')
         const myRejitteredJittersButton = document.getElementById('myRejitteredJitters')
-
+        const followUserButton = document.getElementById('followUser')
         const followedUsersButton = document.getElementById('followedUsers')
         const followerUsersButton = document.getElementById('followerUsers')
-        
+      
+        followUserButton.addEventListener('click', _ => {
+
+          const username = window.location.href.split('/').pop()
+          console.log(username)
+          const userObject = {username}
+          const followURL = '/user/followUser'
+          fetch(followURL,{
+            method : 'POST',
+            headers : {
+
+              "Content-Type": "application/json",
+              },
+            body : JSON.stringify(userObject)
+          })
+          .then(response => response.json())
+          .then(data => {
+            console.log(data)
+            if(data.message == "user followed"){
+              followUserButton.textContent = "followed";
+              window.location.reload()
+            }else{
+              alert(data.message)
+            }
+          })
+        })
         myJittersButton.addEventListener('click', _ => {
             userJitterSection.innerHTML = ""
             data.publishedJitters.forEach(jitter => {

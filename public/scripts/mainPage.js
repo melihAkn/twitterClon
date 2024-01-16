@@ -293,6 +293,65 @@ const followedUsersJitters = _ => {
 }
 followedUsersJitterLink.addEventListener('click',followedUsersJitters)
 
+const suggestedUsers = _ => {
+    fetch('/suggestedUsers')
+    .then(response => {
+        if(response.status == 200){
+            return response.json()
+        }else{
+            return response.text().then(errorMessage => {
+                throw new Error('Sunucu hatası: ' + errorMessage);
+            });
+        }
+    })
+    .then(data => {
+        const suggestedUsersSection = document.getElementById('suggested-users')
+        data.forEach(suggestedUser => {
+            suggestedUsersSection.innerHTML += `
+            <div class="card">
+            <div class="card-content">
+              <div class="media">
+                <div class="media-left">
+                  <figure class="image is-48x48">
+                    <img class="imageOfUser" src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
+                  </figure>
+                </div>
+                <div class="media-content">
+                  <p class="title is-4 usernameOfUser">${suggestedUser.username}</p>
+                  <p>follower count: ${suggestedUser.followersCount} </p>
+                  <p>followed count: ${suggestedUser.followedCount} </p>
+                </div>
+              </div>
+        </div>
+            </div>
+            <br>
+            `
+        })
+    })
+    .then( _ => {
+        const userImages = document.querySelectorAll('.imageOfUser')
+        const usernameOfUsers = document.querySelectorAll('.usernameOfUser')
+        userImages.forEach(userImage => {
+            const usernameOfUser = userImage.parentElement.parentElement.parentElement.children[1].children[0].textContent
+            userImage.addEventListener('click', function () {
+                window.location.href = `/user/profile/${usernameOfUser}`
+            })
+        })
+        usernameOfUsers.forEach(username => {
+            const usernameToGo = username.textContent
+            username.addEventListener('click', function () {
+                window.location.href = `/user/profile/${usernameToGo}`
+            })
+        })
+
+
+    })
+    .catch(error => console.log(error.message))
+}
+
+
+
+
 const logoutLink = document.getElementById('logout')
 const logout = _ => {
     const logoutURL = "/user/logout"
@@ -330,6 +389,7 @@ logoutLink.addEventListener('click',logout)
 
 document.addEventListener('DOMContentLoaded',async function(){
     await getUserToken()
-    const getAllTweetsURL = "/user/getAllJitters";
-    getJitters(getAllTweetsURL);
+    const getAllTweetsURL = "/user/getAllJitters"
+    getJitters(getAllTweetsURL)
+    suggestedUsers()
 });

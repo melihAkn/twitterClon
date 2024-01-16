@@ -9,6 +9,8 @@ indexRouter.get('/register',controller.registerPage);
 indexRouter.get('/',controller.mainPage);
 //indexRouter.get('/comments/:id')
 
+indexRouter.get('/suggestedUsers',controller.suggestedUsers)
+
 //post patch delete
 
 indexRouter.post('/login',controller.login);

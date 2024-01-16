@@ -27,10 +27,11 @@ const getAllJitters = async(req,res) => {
     try {
         const token = req.cookies.userToken;
         const tokenIsValid = verify(token,userSecretKey);
-        const getAllTweet = await jittersModel.find({});
-        res.status(200).send(getAllTweet);
+        const getAllJitters = await jittersModel.find({}).sort({likeCount : -1})
+        res.status(200).send(getAllJitters);
         
     } catch (error) {
+        console.log(error)
         res.status(500).send(error);
     }
 };
@@ -52,6 +53,7 @@ const followedUsersJitters = async (req,res) => {
                 followedUsersJitter.push(e);
             })
         };
+        followedUsersJitter.sort((a, b) => b.likeCount - a.likeCount);
         res.send(followedUsersJitter);
     } catch (error) {
         console.error(error)

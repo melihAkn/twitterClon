@@ -88,6 +88,43 @@ const getCommentData = async(req,res) => {
 
 
 }
+
+const suggestedUsers = async(req,res) => {
+    try {
+        const token = req.cookies.userToken;
+        const tokenIsValid = verify(token,userSecretKey);
+        const user = await userModel.findById(tokenIsValid.id)
+        const excludedUsernames = [user.username, ...user.followed.map(f => f.username)];
+
+        const suggestedUsers = await userModel.aggregate([
+            {
+                $match: {
+                    username: { $nin: excludedUsernames }
+                }
+            },
+            {
+                $project: {
+                    followersCount: { $size: "$followers" },
+                    followedCount: { $size: "$followed" },
+                    username: 1,
+                }
+            },
+            {
+                $sort: { followersCount: -1 }
+            },
+            {
+                $limit: 5
+            }
+        ]);
+
+        res.status(200).send(suggestedUsers);
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({message : error})
+    }
+    
+}
+
 module.exports = {
     loginPage,
     registerPage,
@@ -97,4 +134,5 @@ module.exports = {
     getCommentID,
     jitterPage,
     getCommentData,
+    suggestedUsers
 }
