@@ -1,35 +1,36 @@
 const {Router} = require('express');
 const controller = require('../controller/userController');
 const userRouter = Router();
-
-userRouter.get('/username',controller.getUsername);
+//jwt control middleware
+const tokenAuthForAllRoutes =require('../middleware/tokenAuthForAllRoutes')
+userRouter.get('/username',tokenAuthForAllRoutes,controller.getUsername);
 userRouter.get('/getUserToken',controller.getUserToken);
 userRouter.get('/profile/:username',controller.profilePageRender);
 //getting user infos
-userRouter.post('/getUserInfos',controller.getUserInfos);
+userRouter.post('/getUserInfos',tokenAuthForAllRoutes,controller.getUserInfos);
 
-userRouter.post('/publishJitter',controller.publishJitter);
+userRouter.post('/publishJitter',tokenAuthForAllRoutes,controller.publishJitter);
 
-userRouter.get('/getAllJitters',controller.getAllJitters);
-userRouter.get('/followedUsersJitters',controller.followedUsersJitters);
+userRouter.get('/getAllJitters',tokenAuthForAllRoutes,controller.getAllJitters);
+userRouter.get('/followedUsersJitters',tokenAuthForAllRoutes,controller.followedUsersJitters);
 
-userRouter.post('/getUserRejitteredJitters',controller.getUserRejitteredJitters);
-userRouter.post('/getUserLikedJitters',controller.getUserLikedJitters);
+userRouter.post('/getUserRejitteredJitters',tokenAuthForAllRoutes,controller.getUserRejitteredJitters);
+userRouter.post('/getUserLikedJitters',tokenAuthForAllRoutes,controller.getUserLikedJitters);
 
-userRouter.post('/getUserFollowedUsers',controller.getUserFollowedUsers);
-userRouter.post('/getUserFollowerUsers',controller.getUserFollowedUsers);
+userRouter.post('/getUserFollowedUsers',tokenAuthForAllRoutes,controller.getUserFollowedUsers);
+userRouter.post('/getUserFollowerUsers',tokenAuthForAllRoutes,controller.getUserFollowedUsers);
 
-userRouter.post('/likeAndUnlikeJitter',controller.likeAndUnlikeJitter);
+userRouter.post('/likeAndUnlikeJitter',tokenAuthForAllRoutes,controller.likeAndUnlikeJitter);
 
-userRouter.post('/followUser',controller.userFollow);
-userRouter.post('/unfollowUser',controller.unfollowUser);
+userRouter.post('/followUser',tokenAuthForAllRoutes,controller.userFollow);
+userRouter.post('/unfollowUser',tokenAuthForAllRoutes,controller.unfollowUser);
 
-userRouter.post('/addComment',controller.addComment);
+userRouter.post('/addComment',tokenAuthForAllRoutes,controller.addComment);
 //remove comment
 //update comment
 
-userRouter.post('/rejitter',controller.rejitter);
-userRouter.post('/removeRejitter',controller.removeRejitter);
+userRouter.post('/rejitter',tokenAuthForAllRoutes,controller.rejitter);
+userRouter.post('/removeRejitter',tokenAuthForAllRoutes,controller.removeRejitter);
 
 userRouter.get('/logout',controller.logout);
 module.exports = userRouter;

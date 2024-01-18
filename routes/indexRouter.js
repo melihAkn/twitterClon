@@ -2,14 +2,14 @@ const {Router} = require('express');
 const controller = require('../controller/indexController');
 const userController = require('../controller/userController');
 const indexRouter = Router();
-
+const tokenAuthForAllRoutes =require('../middleware/tokenAuthForAllRoutes')
 //page renders
 indexRouter.get('/login',controller.loginPage);
 indexRouter.get('/register',controller.registerPage);
 indexRouter.get('/',controller.mainPage);
 //indexRouter.get('/comments/:id')
 
-indexRouter.get('/suggestedUsers',controller.suggestedUsers)
+indexRouter.get('/suggestedUsers',tokenAuthForAllRoutes,controller.suggestedUsers)
 
 //post patch delete
 

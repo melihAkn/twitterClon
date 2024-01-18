@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const expHbs = require('express-handlebars');
 
 require('dotenv').config();
+
 //router files
 const indexRouter = require('./routes/indexRouter');
 const userRouter = require('./routes/userRouter');

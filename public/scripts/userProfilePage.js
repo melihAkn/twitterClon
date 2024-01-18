@@ -11,7 +11,7 @@ const getUserInfos = async _ => {
       },
       body : JSON.stringify(originalUsername)
     })
-    .then(response => response.json())
+    .then( response => response.json())
     .then(data => {
         userProfileSection.innerHTML = `
         <div class="card">
@@ -411,7 +411,9 @@ const getUserInfos = async _ => {
         })
 
     })
-    .catch(e => console.error(e))
+    .catch(e => {
+      console.error(e)
+    })
 }
 
 const logoutLink = document.getElementById('logout')

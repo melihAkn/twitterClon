@@ -25,8 +25,6 @@ const getUserToken = (req,res) => {
 
 const getAllJitters = async(req,res) => {
     try {
-        const token = req.cookies.userToken;
-        const tokenIsValid = verify(token,userSecretKey);
         const getAllJitters = await jittersModel.find({}).sort({likeCount : -1})
         res.status(200).send(getAllJitters);
         
@@ -38,12 +36,11 @@ const getAllJitters = async(req,res) => {
 
 const followedUsersJitters = async (req,res) => {
     
-    const token = req.cookies.userToken;
     try {
         const followedUsers = [];
         const followedUsersJitter = [];
-        const tokenVerify = verify(token,userSecretKey);
-        const userFind = await userModel.findById(tokenVerify.id);
+        const token = req.token;
+        const userFind = await userModel.findById(token.id);
         const findFollowedUsers = userFind.followed.forEach(e => {
             followedUsers.push(e.username);
         })
@@ -62,9 +59,8 @@ const followedUsersJitters = async (req,res) => {
 
 const publishJitter = async (req,res) => {
     try {
-        const token = req.cookies.userToken;
-        const tokenIsValid = verify(token,userSecretKey);
-        const userFind = await userModel.findById(tokenIsValid.id);
+        const token = req.token;
+        const userFind = await userModel.findById(token.id);
         const tweets = {
             jitterTextContent : req.body.tweet,
             likeCount : 0,
@@ -95,8 +91,6 @@ const likeAndUnlikeJitter = async (req, res) => {
         ownerOfJitterUsername: req.body.jitterOwnerUsername
     };
     try {
-        const token = req.cookies.userToken;
-        const tokenIsValid = verify(token, userSecretKey);
 
         const findUser = await userModel.findOne({ username: req.body.jitterOwnerUsername });
 
@@ -145,11 +139,10 @@ const rejitter = async (req,res) => {
         jitterText : req.body.rejitterTweetText,
         username : req.body.rejitterTweetUsername
     };
-    const token = req.cookies.userToken;
+    const token = req.token;
     try {
-        const tokenFind = verify(token,userSecretKey);
         const jitterFind = await jittersModel.findOne({jitterTextContent : jitter.jitterText , ownerOfJitterUsername : jitter.username});
-        const findUser = await userModel.findById(tokenFind.id);
+        const findUser = await userModel.findById(token.id);
         const JitterExists =  findUser.repostedJitters.some(rejitter => rejitter.jitterText === jitter.jitterText && rejitter.username === jitter.username);
         if(JitterExists){
             res.send({message : "you are already rejitter this jitter if you want to remove rejittered list go to profile page",rejittered : false});
@@ -169,9 +162,8 @@ const rejitter = async (req,res) => {
 
 const removeRejitter = async (req,res) => {
     try {
-        const token = req.cookies.userToken;
-        const tokenFind = verify(token,userSecretKey);
-        const findUser = await userModel.findById(tokenFind.id)
+        const token = req.token;
+        const findUser = await userModel.findById(token.id)
         findUser.repostedJitters.pull()
         await userModel.updateOne(
             { _id: findUser._id },
@@ -193,10 +185,9 @@ const removeRejitter = async (req,res) => {
 const userFollow = async (req,res) => {
     try {
         //if user is followed all the belove code shouldnt work
-        const token = req.cookies.userToken;
-        const tokenIsValid = verify(token,userSecretKey);
+        const token = req.token;
         //wants to follow
-        const wantsToFollowUser = await userModel.findById(tokenIsValid.id);
+        const wantsToFollowUser = await userModel.findById(token.id);
         const ifExists =  wantsToFollowUser.followed.some(followed => followed.username === req.body.username);
         //if user already followed requested user dont follow again
         if(ifExists){
@@ -224,10 +215,6 @@ const userFollow = async (req,res) => {
 
 const unfollowUser = async(req,res) => {
     try {
-        console.log("unfollow user req body")
-        console.log(req.body);
-        const token = req.cookies.userToken;
-        const tokenIsValid = verify(token,userSecretKey);
         //user to unfollow
         const wantsToUnfollowedUser = await userModel.findOne({username : req.body.thisUserShouldBeUnfollow});
         //user who wants to unfollow
@@ -254,10 +241,9 @@ const unfollowUser = async(req,res) => {
 
 const addComment = async(req,res) => {
     try {
-        const token = req.cookies.userToken;
-        const tokenIsValid = verify(token,userSecretKey);
+        const token = req.token;
         //comment owner
-        const findUser = await userModel.findById(tokenIsValid.id);
+        const findUser = await userModel.findById(token.id);
         //comment data
         const comment = {
             ownerOfCommnet : findUser.username,
@@ -288,9 +274,8 @@ const deleteComment = async(req,res) => {
 }
 const getUsername = async(req,res) => {
     try {
-        const token = req.cookies.userToken;
-        const tokenVerify = verify(token,userSecretKey);
-        const userFind = await userModel.findById(tokenVerify.id);
+        const token = req.token;
+        const userFind = await userModel.findById(token.id);
         res.status(200).send({username : userFind.username});
     } catch (error) {
        res.status(500).send({error});
@@ -299,22 +284,27 @@ const getUsername = async(req,res) => {
 
 const getUserInfos = async(req,res) => {
     try {
-        const token = req.cookies.userToken;
-        const tokenIsValid = verify(token,userSecretKey);
-
         const userFind = await userModel.find({username : req.body.username})
         .select("-_id -email -password -phoneNumber -createdAt -updatedAt -__v");
         res.status(200).send(userFind[0]);
     } catch (error) {
-        console.log(error);
-        res.send({error});
+        if(error.message == "jwt must be provided"){
+            console.log(error)
+            const errorObject = {
+                error : "JsonWebTokenError",
+                message : "jwt must be provided"
+            }
+            res.status(401).json(errorObject)
+        }else{
+            console.log(error);
+            res.send({error});
+        }
+       
     }
 };
 
 const getUserRejitteredJitters = async (req,res) => {
     try {
-        const token = req.cookies.userToken;
-        const tokenIsValid = verify(token,userSecretKey);
         const rejitteredJitters = [];
         for (const data of req.body) {
             const findRejitters = await jittersModel.find({
@@ -333,8 +323,6 @@ const getUserRejitteredJitters = async (req,res) => {
 
 const getUserLikedJitters = async (req,res) => {
     try {
-        const token = req.cookies.userToken;
-        const tokenIsValid = verify(token,userSecretKey);
         const likedJitters = [];
         for (const data of req.body) {
             const findLiked = await jittersModel.find({
@@ -354,8 +342,6 @@ const getUserLikedJitters = async (req,res) => {
 
 const getUserFollowedUsers = async (req,res) => {
     try {
-        const token = req.cookies.userToken;
-        const tokenVerify = verify(token,userSecretKey);
         const userFollowedUsers = [];
         console.log(req.body);
         for (const data of req.body) {

@@ -25,8 +25,6 @@ const jitterPage = (req,res) => {
 }
 
 
-
-
 const login = async(req,res) => {
     console.log(req.body);
     try {
@@ -75,7 +73,6 @@ const getCommentID = async(req,res) => {
 }
 
 const getCommentData = async(req,res) => {
-    console.log(req.body)
     try {
         const jitter = await jitterModel.findById(req.body.url)
         res.status(200).send(jitter)
@@ -91,9 +88,8 @@ const getCommentData = async(req,res) => {
 
 const suggestedUsers = async(req,res) => {
     try {
-        const token = req.cookies.userToken;
-        const tokenIsValid = verify(token,userSecretKey);
-        const user = await userModel.findById(tokenIsValid.id)
+        const token = req.token;
+        const user = await userModel.findById(token.id)
         const excludedUsernames = [user.username, ...user.followed.map(f => f.username)];
 
         const suggestedUsers = await userModel.aggregate([
