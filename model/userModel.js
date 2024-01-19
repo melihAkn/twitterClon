@@ -64,8 +64,12 @@ const userSchema = new Schema({
         type : [Object],
         required : false,
         default : []
+    },
+    notifications : {
+        type :[Object],
+        required : false,
+        default : []
     }
-
 
 },{collection:'users', timestamps: true})
 

@@ -30,7 +30,7 @@ const getUserInfos = async _ => {
             </div>
             <input type = "button" value = "follow" id="followUser">
           </div>
-          <div>
+          <div id="buttons">
 
             <button id="myJitters" class="button is-small">jitters</button>
             <button id="myLikedJitters" class="button is-small"> liked jitters</button>
@@ -39,7 +39,6 @@ const getUserInfos = async _ => {
 
             <button id="followedUsers" class="button is-small"> followed users</button>
             <button id="followerUsers" class="button is-small"> follower users</button>
-  
           </div>
       </div>
         </div>
@@ -53,7 +52,7 @@ const getUserInfos = async _ => {
         const followUserButton = document.getElementById('followUser')
         const followedUsersButton = document.getElementById('followedUsers')
         const followerUsersButton = document.getElementById('followerUsers')
-      
+       
         followUserButton.addEventListener('click', _ => {
 
           const username = window.location.href.split('/').pop()
@@ -79,6 +78,14 @@ const getUserInfos = async _ => {
             }
           })
         })
+        fetch('/user/username')
+        .then(response => response.json())
+        .then(data => {
+          if(data.username === username){
+            followUserButton.remove()
+          }
+        }).catch(e => console.log(e))
+       
         myJittersButton.addEventListener('click', _ => {
             userJitterSection.innerHTML = ""
             data.publishedJitters.forEach(jitter => {

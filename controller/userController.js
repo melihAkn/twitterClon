@@ -85,7 +85,7 @@ const likeAndUnlikeJitter = async (req, res) => {
     let responseMessage = {
         message: ""
     };
-
+    const token = req.token
     const jitter = {
         jitterTextContent: req.body.jitterText,
         ownerOfJitterUsername: req.body.jitterOwnerUsername
@@ -123,6 +123,9 @@ const likeAndUnlikeJitter = async (req, res) => {
             if (findJitter) {
                 findJitter.likeCount += 1;
                 await findJitter.save();
+                const findWhoLikedJitter = await userModel.findById(token.id)
+                findUser.notifications.push({likedUser : findWhoLikedJitter.username , message : `${findWhoLikedJitter.username} liked your this tweet ${jitter.jitterTextContent}`})
+                await findUser.save();
             }
 
             responseMessage.message = "jitter has liked";
@@ -144,6 +147,7 @@ const rejitter = async (req,res) => {
         const jitterFind = await jittersModel.findOne({jitterTextContent : jitter.jitterText , ownerOfJitterUsername : jitter.username});
         const findUser = await userModel.findById(token.id);
         const JitterExists =  findUser.repostedJitters.some(rejitter => rejitter.jitterText === jitter.jitterText && rejitter.username === jitter.username);
+        findOwnerOfJitter = await userModel.findOne({username : jitter.username})
         if(JitterExists){
             res.send({message : "you are already rejitter this jitter if you want to remove rejittered list go to profile page",rejittered : false});
         }else{
@@ -151,6 +155,8 @@ const rejitter = async (req,res) => {
             await findUser.save();
             jitterFind.repostCount +=1;
             jitterFind.save();
+            findOwnerOfJitter.notifications.push({rejitterUser : findUser.username , message : `${findUser.username} rejitter your this tweet ${jitterFind.jitterTextContent}`})
+            findOwnerOfJitter.save()
             res.status(200).send({message : 'jitter rejitted',rejittered : true});
         }
 
@@ -200,6 +206,7 @@ const userFollow = async (req,res) => {
         wantsToFollowUser.save();
         const beingFollowedUser = await userModel.findOne({username : req.body.username});
         beingFollowedUser.followers.push({username : wantsToFollowUser.username});
+        beingFollowedUser.notifications.push({followerUser : wantsToFollowUser.username , message : `${wantsToFollowUser.username} followed you`})
         beingFollowedUser.save();
 
         res.status(200).send({message : "user followed"});
@@ -253,7 +260,10 @@ const addComment = async(req,res) => {
         const findJitter = await jittersModel.findById(req.body.jitterId);
         findJitter.jitterComment.push(comment);
         findJitter.save();
-
+        findJitter.ownerOfJitterUsername
+        const findCommentedJitterOwner = await userModel.findOne({username : findJitter.ownerOfJitterUsername})
+        findCommentedJitterOwner.notifications.push({commentedUser : findUser.username , message : `${findUser.username} commented this ${comment.commnetText} to your this jitter ${findJitter.jitterTextContent}`})
+        findCommentedJitterOwner.save()
         res.status(200).send({message : 'comment added succesfully'});
     } catch (error) {
         console.error(error);
@@ -363,6 +373,7 @@ const getUserFollowedUsers = async (req,res) => {
 
 
 
+
 const logout = (req,res) => {
     try {
         res.clearCookie('userToken',{path : '/'});
@@ -390,5 +401,4 @@ module.exports = {
     getUserRejitteredJitters,
     getUserLikedJitters,
     getUserFollowedUsers,
-    
 };
