@@ -38,8 +38,10 @@ const login = async(req,res) => {
 };
 
 const register = async(req,res) => {
+    console.log(req.body)
     try {
-          hash(req.body.password, 10).then(async function(hash) {
+        const password = req.body.password
+          hash(password, 10).then(async function(hash) {
             console.log(hash);
             req.body.password = hash;
             const user = new userModel(req.body);

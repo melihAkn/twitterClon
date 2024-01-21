@@ -75,12 +75,17 @@ body {
 <body>
     <!--this is first section to be blank because page partition have to work  -->
     <section class="firstBlanArea"></section>
-    <section id="user-actions " class="userActions">
+    <section id="userActions" class="userActions">
         <a href="/" class="is-medium">main page</a><br>
         <a href="#" id="userProfile">profile</a><br>
+        <a href="#" id="showNotification">notifications</a><br>
+        <div hidden = "true" id="notifications">
+           
+           </div>
         <a href="#" id="logout">logout</a><br>
+        
     </section>
-
+    
     <section id="tweet-section " class="tweetAndTimeline" >
         <a href="" class="mainPageHref">discover Jitters</a> 
         <a  class="followersTweetHref" id="followedUserJitters">followed users tweet</a>
@@ -105,7 +110,8 @@ body {
     <section class="lastBlankArea"></section>
 
 
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.2.0/socket.io.js"></script>
     <script src="../../scripts/mainPage.js"></script>
+
 </body>
 </html>

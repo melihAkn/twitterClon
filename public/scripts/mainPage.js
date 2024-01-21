@@ -382,6 +382,32 @@ const userProfilePage = _ => {
 
 
 }
+const showNotifications = document.getElementById('showNotification')
+const notifications = document.getElementById('notifications')
+
+showNotifications.addEventListener('click', _ => {
+    notifications.innerHTML = '<ul id="messageList"></ul>'
+    const messageList = document.getElementById('messageList');
+    fetch('/notifications')
+    notifications.hidden = false
+    const socket = io('http://localhost:3001');
+    
+    const randomNumber = Math.floor(Math.random() * 100)
+    // Kullanıcı tarafında
+socket.emit('joinRoom', { roomID: randomNumber, username: 'dwdwd' });
+
+  socket.on('newMessage', (data) => {
+    const listItem = document.createElement('li');
+    listItem.textContent = `${data.message}`;
+    messageList.appendChild(listItem);
+  });
+
+  setTimeout(() => {
+    notifications.innerHTML = ''
+  }, 10000);
+})
+
+
 userProfilePageLİnk.addEventListener('click',userProfilePage)
 sendTweetButton.addEventListener('click',sendJitter);
 
