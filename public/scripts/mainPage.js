@@ -385,19 +385,21 @@ const userProfilePage = _ => {
 const showNotifications = document.getElementById('showNotification')
 const notifications = document.getElementById('notifications')
 let isClicked = false;
-showNotifications.addEventListener('click', _ => {
-    notifications.innerHTML = ''
-    fetch('/notifications')
-    notifications.hidden = false
-    const socket = io('http://localhost:3001');
-    
-    const randomNumber = Math.floor(Math.random() * 100)
-socket.emit('joinRoom', { roomID: randomNumber, username: 'dwdwd' });
-  socket.on('newMessage', (data) => {
+showNotifications.addEventListener('click',async _ => {
     if (isClicked) {
         notifications.innerHTML = ''
         isClicked = false;
-      } else {
+} else {
+
+    notifications.innerHTML = ''
+    notifications.hidden = false
+    const socket = io('http://localhost:3001');
+    
+    const randomNumber = Math.floor(Math.random() * 1000)
+    socket.emit('joinRoom', { roomID: randomNumber, token });
+    socket.on('newMessage', (data) => {
+   
+      
         data.forEach(e => {
             notifications.innerHTML +=`
             <div class="notification">
@@ -406,8 +408,9 @@ socket.emit('joinRoom', { roomID: randomNumber, username: 'dwdwd' });
             `
         })
         isClicked = true;
-      }
+      
   });
+}
 })
 
 
