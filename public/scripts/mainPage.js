@@ -384,27 +384,30 @@ const userProfilePage = _ => {
 }
 const showNotifications = document.getElementById('showNotification')
 const notifications = document.getElementById('notifications')
-
+let isClicked = false;
 showNotifications.addEventListener('click', _ => {
-    notifications.innerHTML = '<ul id="messageList"></ul>'
-    const messageList = document.getElementById('messageList');
+    notifications.innerHTML = ''
     fetch('/notifications')
     notifications.hidden = false
     const socket = io('http://localhost:3001');
     
     const randomNumber = Math.floor(Math.random() * 100)
-    // Kullanıcı tarafında
 socket.emit('joinRoom', { roomID: randomNumber, username: 'dwdwd' });
-
   socket.on('newMessage', (data) => {
-    const listItem = document.createElement('li');
-    listItem.textContent = `${data.message}`;
-    messageList.appendChild(listItem);
+    if (isClicked) {
+        notifications.innerHTML = ''
+        isClicked = false;
+      } else {
+        data.forEach(e => {
+            notifications.innerHTML +=`
+            <div class="notification">
+            <a href="/user/profile/${e.message.split(' ')[0]}" style="text-decoration: none;">${e.message}</a>
+          </div>
+            `
+        })
+        isClicked = true;
+      }
   });
-
-  setTimeout(() => {
-    notifications.innerHTML = ''
-  }, 10000);
 })
 
 

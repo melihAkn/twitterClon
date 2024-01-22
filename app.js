@@ -4,14 +4,9 @@ const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
 const expHbs = require('express-handlebars');
 
-//socket io dependencies
-const http = require('http');
-const socketIO = require('socket.io');
 
 //
 require('dotenv').config();
-//middleware
-const tokenAuth = require('./middleware/tokenAuthForAllRoutes')
 //router files
 const indexRouter = require('./routes/indexRouter');
 const userRouter = require('./routes/userRouter');
@@ -44,42 +39,6 @@ const connectionString = process.env.CONNECTION_STRING;
 jitter.listen(port , _ => {
     console.log(`server running on ${port}`);
 });
-
-//socket io
-const userModel = require('./model/userModel')
-const {verify} = require('jsonwebtoken')
-const server = http.createServer(jitter);
-const io = socketIO(server);
-let userId
-let user
-const secretKey = process.env.JWT_USER_SECRET_KEY
-jitter.get('/notifications', async (req, res) => {
-  console.log(req.cookies.userToken + "token")
-  const userToken = verify(req.cookies.userToken,secretKey)
-  userId = userToken.id
-  user = await userModel.findById(userId)
-  res.send()
-});
-
-io.on('connection', (socket) => {
-  
-socket.on('joinRoom', (userInfos) => {
-
-  console.log(userInfos);
-  socket.join(userInfos.roomID);
-  user.notifications.reverse().forEach(e => {
-    io.to(userInfos.roomID).emit('newMessage',e)
-  });
-});
-
- 
-
-
-  socket.on('disconnect', () => {
-  });
-});
-
-const chatAndNotificationPort = 3001
-server.listen(chatAndNotificationPort, () => {
-  console.log('server on the go this port ' + chatAndNotificationPort);
-});
+//first jitter server then chat and notify server run
+//chat and notificaton package
+require('./chatAndNotification')
