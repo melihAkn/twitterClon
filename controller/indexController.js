@@ -23,6 +23,9 @@ const jitterPage = (req,res) => {
 
 
 }
+const messagePage = (req,res) => {
+    res.render('./pages/messages')
+}
 
 
 const login = async(req,res) => {
@@ -132,5 +135,6 @@ module.exports = {
     getCommentID,
     jitterPage,
     getCommentData,
-    suggestedUsers
+    suggestedUsers,
+    messagePage
 }

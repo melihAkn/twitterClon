@@ -397,7 +397,7 @@ showNotifications.addEventListener('click',async _ => {
     
     const randomNumber = Math.floor(Math.random() * 1000)
     socket.emit('joinRoom', { roomID: randomNumber, token });
-    socket.on('newMessage', (data) => {
+    socket.on('newNotification', (data) => {
    
       
         data.forEach(e => {

@@ -29,8 +29,21 @@ socket.on('joinRoom', async(userInfos) => {
     messages.push(e)
     
   });
-  io.to(userInfos.roomID).emit('newMessage',messages)
+  io.to(userInfos.roomID).emit('newNotification',messages)
 });
+
+
+  socket.on('joinChatRoom',async(chatRoomInfos) => {
+
+
+
+  })
+
+
+
+
+
+
 
   socket.on('disconnect', () => {
   });

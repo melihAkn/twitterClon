@@ -371,7 +371,10 @@ const getUserFollowedUsers = async (req,res) => {
 
 };
 
+const getSearchedUsers = async(req,res) => {
 
+    res.send()
+}
 
 
 const logout = (req,res) => {
@@ -401,4 +404,5 @@ module.exports = {
     getUserRejitteredJitters,
     getUserLikedJitters,
     getUserFollowedUsers,
+    getSearchedUsers
 };

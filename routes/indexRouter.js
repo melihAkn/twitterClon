@@ -7,12 +7,13 @@ const tokenAuthForAllRoutes =require('../middleware/tokenAuthForAllRoutes')
 indexRouter.get('/login',controller.loginPage);
 indexRouter.get('/register',controller.registerPage);
 indexRouter.get('/',controller.mainPage);
+indexRouter.get('/messaging',controller.messagePage)
 //indexRouter.get('/comments/:id')
 
 indexRouter.get('/suggestedUsers',tokenAuthForAllRoutes,controller.suggestedUsers)
 
 //post patch delete
-
+indexRouter.post('/searchUser',userController.getSearchedUsers)
 indexRouter.post('/login',controller.login);
 indexRouter.post('/register',controller.register);
 
