@@ -44,7 +44,7 @@ const getJitters = (url = "/user/getAllJitters") => {
 
 
           <div class="media-content">
-            <p class="title is-4 jitterUsername">${jitterData.ownerOfJitterUsername}</p>
+            <p class="title is-4 jitterUsername">${jitterData.ownerOfJitterVisibleName}</p>
             <p class="subtitle is-6 jitterUsernameButSpclChrt" >@${jitterData.ownerOfJitterUsername}</p>
           </div>
         </div>
@@ -74,8 +74,10 @@ const getJitters = (url = "/user/getAllJitters") => {
     <br>
             `  
         });
+        return data
     })
-    .then( _ => {
+    .then( data => {
+        console.log(data)
         const likeButton = document.querySelectorAll('.likeButton');
         const commentButton = document.querySelectorAll('.commentButton');
         const rejitterButton = document.querySelectorAll('.reJitterButton');
@@ -86,13 +88,9 @@ const getJitters = (url = "/user/getAllJitters") => {
    
         userImages.forEach(userImage => {
             userImage.addEventListener('click', function () {
-                let goProfilePage = userImage.parentElement.parentElement.parentElement.children[1].childNodes[1].textContent
+                let goProfilePage = userImage.parentElement.parentElement.parentElement.children[1].childNodes[3].textContent.replace('@','')
+                console.log(goProfilePage)
                 window.location.href = `/user/profile/${goProfilePage}`
-            })
-        })
-        jitterUsernames.forEach(jitterUsername => {
-            jitterUsername.addEventListener('click', function () {
-                window.location.href = `/user/profile/${jitterUsername.textContent}`
             })
         })
 
@@ -100,6 +98,11 @@ const getJitters = (url = "/user/getAllJitters") => {
             const removeSpcCharecter = jitterUsernameButSpclChrt.textContent.replace('@','')
             jitterUsernameButSpclChrt.addEventListener('click', function () {
                 window.location.href = `/user/profile/${removeSpcCharecter}`
+            })
+            jitterUsernames.forEach(jitterUsername => {
+                jitterUsername.addEventListener('click', function () {
+                    window.location.href = `/user/profile/${removeSpcCharecter}`
+                })
             })
         })
 
@@ -165,6 +168,7 @@ const getJitters = (url = "/user/getAllJitters") => {
                     jitterText,
                     jitterOwnerUsername
                 }
+                console.log(jitterJSON)
                 const likeButtonURL = "/user/likeAndUnlikeJitter"
                 fetch(likeButtonURL,{
                     method : "POST",
@@ -191,6 +195,7 @@ const getJitters = (url = "/user/getAllJitters") => {
                         jitterTextArray.pop()
                     }
                 }
+                console.log(data)
                 let jitterText = jitterTextArray.join(" ").replace('\n','')
                 const username = commentButtons.parentElement.parentElement.parentElement.parentElement.childNodes[3].childNodes[3].childNodes[3].childNodes[0].nodeValue.replace('@','')
                 const jitter = {

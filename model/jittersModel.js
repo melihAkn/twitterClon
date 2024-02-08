@@ -32,6 +32,12 @@ const jitterSchema = new Schema ({
         minLength : 3,
         maxlength : 40,
         require : true
+    },
+    ownerOfJitterVisibleName : {
+        type : String,
+        minLength : 3,
+        maxlength : 40,
+        require : true
     }
 
 

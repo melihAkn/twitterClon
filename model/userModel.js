@@ -5,7 +5,13 @@ const {sign} = require('jsonwebtoken');
 const {compare} = require('bcrypt');
 const Schema =  mongoose.Schema;
 const userSchema = new Schema({
+    name : {
+        type :String,
+        required : true,
+        maxlength : 40,
+        minlength : 1
 
+    },
     username : {
         type : String,
         required : true,

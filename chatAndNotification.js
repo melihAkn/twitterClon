@@ -30,19 +30,23 @@ socket.on('joinRoom', async(userInfos) => {
     
   });
   io.to(userInfos.roomID).emit('newNotification',messages)
+  const changeStream = userModel.watch()
+  changeStream.on('change', async(change) => {
+    if (change.operationType === 'insert') {
+        const newNotification = change.fullDocument;
+        console.log(newNotification)
+  
+        
+        io.to(newNotification.roomID).emit('newNotification', newNotification);
+    }
+  });
 });
 
-
-  socket.on('joinChatRoom',async(chatRoomInfos) => {
+socket.on('joinChatRoom',async(chatRoomInfos) => {
 
 
 
   })
-
-
-
-
-
 
 
   socket.on('disconnect', () => {

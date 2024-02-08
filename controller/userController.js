@@ -22,12 +22,12 @@ const getUserToken = (req,res) => {
     }
 
 };
-
 const getAllJitters = async(req,res) => {
     try {
-        const getAllJitters = await jittersModel.find({}).sort({likeCount : -1})
+        const getAllJitters = await jittersModel.find({})
+        .select('-updatedAt -__v')
+        .sort({likeCount : -1})
         res.status(200).send(getAllJitters);
-        
     } catch (error) {
         console.log(error)
         res.status(500).send(error);
@@ -71,8 +71,12 @@ const publishJitter = async (req,res) => {
         const saveTweet = await userFind.save();
 
         tweets.commentCount = {};
+        console.log(userFind);
         tweets.ownerOfJitterUsername = userFind.username;
+        tweets.ownerOfJitterVisibleName = userFind.name;
+        console.log(tweets);
         const addJitter = new jittersModel(tweets);
+        
         await addJitter.save();
         res.status(200).send({message : "tweet has added succesfully"});
     } catch (error) {

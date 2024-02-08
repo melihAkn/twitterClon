@@ -33,7 +33,7 @@ const getCommentData = async _ => {
             </figure>
           </div>
           <div class="media-content">
-            <p class="title is-4">${data.ownerOfJitterUsername}</p>
+            <p class="title is-4">${data.ownerOfJitterVisibleName}</p>
             <p class="subtitle is-6">@${data.ownerOfJitterUsername}</p>
           </div>
         </div>
@@ -114,6 +114,7 @@ const getCommentData = async _ => {
 
         //adding comments
         const comments = document.getElementById('comments')
+        console.log(data)
         data.jitterComment.forEach(comment => {
             comments.innerHTML += `
 
@@ -128,7 +129,7 @@ const getCommentData = async _ => {
                 
                 <div class="media-content">
                  
-                  <p class="title is-4">${comment.ownerOfCommnet} </p>
+                  <p class="title is-4">${data.ownerOfJitterVisibleName} </p>
                   <p class="subtitle is-6">@${comment.ownerOfCommnet}</p>
                 </div>
               </div>
