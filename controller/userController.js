@@ -1,6 +1,7 @@
 const userModel = require('../model/userModel');
 const jittersModel = require('../model/jittersModel');
 const {verify} = require('jsonwebtoken');
+const {compare,hash} = require('bcrypt')
 require('dotenv').config();
 const userSecretKey = process.env.JWT_USER_SECRET_KEY;
 
@@ -8,7 +9,9 @@ const profilePageRender = (req,res) => {
     
     res.render('./pages/userProfilePage')
 }
-
+const testHTMLPageRender = (req,res) => {
+    res.render('./pages/testHTML')
+}
 const getUserToken = (req,res) => {
     try {
         const token = req.cookies.userToken;
@@ -71,10 +74,8 @@ const publishJitter = async (req,res) => {
         const saveTweet = await userFind.save();
 
         tweets.commentCount = {};
-        console.log(userFind);
         tweets.ownerOfJitterUsername = userFind.username;
         tweets.ownerOfJitterVisibleName = userFind.name;
-        console.log(tweets);
         const addJitter = new jittersModel(tweets);
         
         await addJitter.save();
@@ -230,7 +231,6 @@ const unfollowUser = async(req,res) => {
         const wantsToUnfollowedUser = await userModel.findOne({username : req.body.thisUserShouldBeUnfollow});
         //user who wants to unfollow
         const wantsToUnfollowUser = await userModel.find({username : req.body.username});
-        console.log(wantsToUnfollowedUser)
         //user unfollow 
         await userModel.updateOne(
             { _id: wantsToUnfollowUser[0]._id },
@@ -357,7 +357,6 @@ const getUserLikedJitters = async (req,res) => {
 const getUserFollowedUsers = async (req,res) => {
     try {
         const userFollowedUsers = [];
-        console.log(req.body);
         for (const data of req.body) {
             const findUser = await userModel.find({
               username: data.username,
@@ -365,7 +364,6 @@ const getUserFollowedUsers = async (req,res) => {
         .select("-_id -password -email -phoneNumber -dateOfBirth -likedJitters -repostedJitters -publishedJitters -createdAt -updatedAt -__v");
         userFollowedUsers.push(findUser[0]);
     }
-    console.log(userFollowedUsers);
     res.status(200).send(userFollowedUsers);
 
     } catch (error) {
@@ -374,11 +372,73 @@ const getUserFollowedUsers = async (req,res) => {
 
 
 };
-
+//for chat system
 const getSearchedUsers = async(req,res) => {
 
     res.send()
 }
+
+const getUserInfosForUpdate = async(req,res) => {
+    try {
+
+        const userToken = req.token
+        const findUser = await userModel.findById(userToken.id)
+            .select('-followed -followers -_id -password -likedJitters -repostedJitters -publishedJitters -notifications -__v -createdAt -updatedAt')
+            res.status(200).send(findUser) 
+    } catch (error) {
+        res.status(500).send({error})
+    }
+   
+}
+
+const updateUserInfos = async(req,res) => {
+    const token = req.token
+    try {
+        const findUser = await userModel.findById(token.id)
+        const compareUserPassword = await compare(req.body.password , findUser.password)
+        if(compareUserPassword){
+            //update
+            if(req.body.newPassword){
+                req.body.password = req.body.newPassword
+                await hash(req.body.password, 10).then(async function(hash) {
+                    console.log(hash);
+                    req.body.password = hash;
+                });
+                const updateData = {
+                    name : req.body.name,
+                    password : req.body.password,
+                    email : req.body.email,
+                    phoneNumber : req.body.phoneNumber,
+                    dateOfBirth : req.body.dateOfBirth
+                }
+                console.log("update data here")
+                console.log(updateData)
+                //update here
+                const updateUserInfos = await userModel.updateOne({_id : token.id},updateData)
+            }else{
+                //direct update
+                const updateData = {
+                    name : req.body.name,
+                    email : req.body.email,
+                    phoneNumber : req.body.phoneNumber,
+                    dateOfBirth : req.body.dateOfBirth
+                }
+                //update here
+                const updateUserInfos = await userModel.updateOne({_id : token.id},updateData)
+            }
+            res.status(200).send({message : "infos updated successfully", updated : true})
+        }
+        else{
+            res.status(400).send({message : "wrong password" , updated : compareUserPassword})
+        }
+        //actual return value
+        
+
+    } catch (error) {
+        res.status(500).send({error})
+    }
+}
+
 
 
 const logout = (req,res) => {
@@ -390,6 +450,7 @@ const logout = (req,res) => {
     }
     
 };
+
 module.exports = {
     profilePageRender,
     getUserToken,
@@ -408,5 +469,8 @@ module.exports = {
     getUserRejitteredJitters,
     getUserLikedJitters,
     getUserFollowedUsers,
-    getSearchedUsers
+    getSearchedUsers,
+    getUserInfosForUpdate,
+    updateUserInfos,
+    testHTMLPageRender
 };

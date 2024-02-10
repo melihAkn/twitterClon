@@ -6,6 +6,7 @@ const tokenAuthForAllRoutes =require('../middleware/tokenAuthForAllRoutes')
 userRouter.get('/username',tokenAuthForAllRoutes,controller.getUsername);
 userRouter.get('/getUserToken',controller.getUserToken);
 userRouter.get('/profile/:username',controller.profilePageRender);
+userRouter.get('/pageTest',controller.testHTMLPageRender)
 //getting user infos
 userRouter.post('/getUserInfos',tokenAuthForAllRoutes,controller.getUserInfos);
 
@@ -29,6 +30,8 @@ userRouter.post('/addComment',tokenAuthForAllRoutes,controller.addComment);
 //remove comment
 //update comment
 
+userRouter.get('/getUserInfosForUpdateInfos',tokenAuthForAllRoutes,controller.getUserInfosForUpdate)
+userRouter.post('/updateUserInfos',tokenAuthForAllRoutes,controller.updateUserInfos)
 userRouter.post('/rejitter',tokenAuthForAllRoutes,controller.rejitter);
 userRouter.post('/removeRejitter',tokenAuthForAllRoutes,controller.removeRejitter);
 

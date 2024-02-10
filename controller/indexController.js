@@ -29,10 +29,8 @@ const messagePage = (req,res) => {
 
 
 const login = async(req,res) => {
-    console.log(req.body);
     try {
         const userToken = await userModel.login(req.body.username,req.body.password);
-        console.log("token " + userToken);
         res.cookie('userToken',userToken,{maxAge : 3600000,httpOnly: true, path: '/',secure : false});
         res.redirect('/');
     } catch (error) {

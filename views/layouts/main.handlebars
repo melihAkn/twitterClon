@@ -3,10 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
-    <title>Document</title>
+    <link rel="stylesheet" href="../../css/index.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="../../images/favicon_io/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../../images/favicon_io/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../../images/favicon_io/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <title>Jitter</title>
+     <style>
+body {
+  width: 100%;
+  float: left;
+  
+}
+
+.followButton{
+  float: right;
+}
+
+.firstBlanArea
+{
+  width: 10%;
+  float: left;
+  height: 100px;
+  
+}
+
+.userActions
+{
+  width: 15%;
+  float: left;
+  height: 100px;
+  
+}
+
+.tweetAndTimeline
+{
+  width: 50%;
+  float: left;
+  height: 100px;
+  
+}
+
+.suggestedUsers
+{
+  width: 15%;
+  float: left;
+  height: 100px;
+  
+}
+
+.lastBlankArea
+{
+  width: 10%;
+  float: left;
+  height: 100px;
+  
+}
+.mainPageHref{
+    float: left;
+}
+.followersTweetHref{
+    float: right;
+}
+
+.userImage:hover,
+.jitterUsername:hover,
+.jitterUsernameButSpclChrt:hover,
+.imageOfUser:hover,
+.usernameOfUser:hover {
+  cursor: pointer;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f4f4f4;
+}
+
+#chat-container {
+  display: flex;
+  width: 900px;
+  height:  600px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+#user-list {
+  width: 25%;
+  padding: 5px;
+  border-right: 1px solid #ccc;
+}
+
+.user {
+  padding: 10px;
+  margin-bottom: 5px;
+  cursor: pointer;
+}
+
+#chat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+#selected-user {
+  padding: 10px;
+  background-color: #f2f2f2;
+  border-bottom: 1px solid #ccc;
+}
+
+#messages {
+  flex: 1;
+  overflow-y: scroll;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+#message-input {
+  padding: 8px;
+  margin: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  padding: 5px;
+  margin: 5px;
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+    </style>
 </head>
 <body>
     {{{body}}}
 </body>
 </html>
+

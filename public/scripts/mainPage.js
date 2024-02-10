@@ -77,7 +77,6 @@ const getJitters = (url = "/user/getAllJitters") => {
         return data
     })
     .then( data => {
-        console.log(data)
         const likeButton = document.querySelectorAll('.likeButton');
         const commentButton = document.querySelectorAll('.commentButton');
         const rejitterButton = document.querySelectorAll('.reJitterButton');
@@ -89,7 +88,6 @@ const getJitters = (url = "/user/getAllJitters") => {
         userImages.forEach(userImage => {
             userImage.addEventListener('click', function () {
                 let goProfilePage = userImage.parentElement.parentElement.parentElement.children[1].childNodes[3].textContent.replace('@','')
-                console.log(goProfilePage)
                 window.location.href = `/user/profile/${goProfilePage}`
             })
         })
@@ -168,7 +166,6 @@ const getJitters = (url = "/user/getAllJitters") => {
                     jitterText,
                     jitterOwnerUsername
                 }
-                console.log(jitterJSON)
                 const likeButtonURL = "/user/likeAndUnlikeJitter"
                 fetch(likeButtonURL,{
                     method : "POST",
@@ -195,7 +192,6 @@ const getJitters = (url = "/user/getAllJitters") => {
                         jitterTextArray.pop()
                     }
                 }
-                console.log(data)
                 let jitterText = jitterTextArray.join(" ").replace('\n','')
                 const username = commentButtons.parentElement.parentElement.parentElement.parentElement.childNodes[3].childNodes[3].childNodes[3].childNodes[0].nodeValue.replace('@','')
                 const jitter = {
