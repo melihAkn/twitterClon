@@ -19,7 +19,7 @@ const getUserInfos = async _ => {
           <div class="media">
             <div class="media-left">
               <figure class="image is-48x48">
-                <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
+                <img id="userProfilePicture" src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
               </figure>
             </div>
             <div class="media-content">
@@ -54,6 +54,7 @@ const getUserInfos = async _ => {
         const followedUsersButton = document.getElementById('followedUsers')
         const followerUsersButton = document.getElementById('followerUsers')
         const updateUserInfosButton = document.getElementById('updateUserInfos')
+        const userImageProfilePicture = document.getElementById('userProfilePicture')
         followUserButton.addEventListener('click', _ => {
 
           const username = window.location.href.split('/').pop()
@@ -433,37 +434,35 @@ const getUserInfos = async _ => {
             userJitterSection.innerHTML = `
             <iframe name="votar" style="display:none;"></iframe>
             <form id="updateForm" class="is-centered " target = "votar"  >
-
-            <p>name: </p>
-              <label for="name"></label>
+            <!-- 
+              <label for="userProfilePicture"><p>profile picture: </p></label>
+              <img id="userProfilePicture" name = "userProfilePicture" class="userProfilePicture"  src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
+              </br>
+              <input type="file" id="fileInput" accept="image/*">
+              !-->
+              <label for="name"><p>name: </p></label>
               <input type="text" name="name" id="name" class="input" placeholder="visible name" value="${data.name}" required><br>
        
-          
-            <p>email: </p>
-              <label for="email"></label>
+              <label for="email"><p>email: </p></label>
               <input type="email" name="email" id="email" class="input" placeholder="email" value="${data.email}" required><br>
-       
-            <p>phoneNumber: </p>
-              <label for="phoneNumber"></label>
+            
+              <label for="phoneNumber"><p>phoneNumber: </p></label>
               <input type="text" name="phoneNumber" id="phoneNumber" class="input" placeholder="phone number" value="${data.phoneNumber}" required><br>
        
-            <p>date of birth: </p>
-              <label for="dateOfBirth"></label>
+              <label for="dateOfBirth"><p>date of birth: </p></label>
               <input type="date" name="dateOfBirth" id="dateOfBirth" class="input" value="${formatDate(data.dateOfBirth)}" required><br>
             
-            <p>current password: * </p>
-              <label for="currentPassword"></label>
+              <label for="currentPassword"><p>current password: * </p></label>
               <input type="password" name="currentPassword" id="currentPassword" class="input" required><br>
               <p> if dont want to update your password keep it blank</p>
-            <p>new password: </p>
-              <label for="newPassword"></label>
+            
+              <label for="newPassword"><p>new password: </p></label>
               <input type="password" name="newPassword" id="newPassword" class="input" ><br>
             
-            <p>new password again: </p>
-              <label for="newPasswordAgain"></label>
+              <label for="newPasswordAgain"><p>new password again: </p></label>
               <input type="password" name="newPasswordAgain" id="newPasswordAgain" class="input" ><br>
         
-               <button class="button" id="updateButton"  is-rounded"> UPDATE INFOS</button>
+              <button class="button" id="updateButton"  is-rounded"> UPDATE INFOS</button>
        
              </form>
             
@@ -475,7 +474,7 @@ const getUserInfos = async _ => {
             const currentPasswordInput = document.getElementById('currentPassword')
             const newPasswordInput = document.getElementById('newPassword')
             const newPasswordAgainInput = document.getElementById('newPasswordAgain')
-
+       
             function controlTyping() {
               if(newPasswordInput.value.length > 0 || newPasswordAgainInput.value.length > 0){
                 newPasswordInput.required = true
@@ -538,11 +537,32 @@ const getUserInfos = async _ => {
           })
           .catch(e => console.log(e))
         })
+
+        userImageProfilePicture.addEventListener('click', _ => {
+          console.log("tiklandi")
+          userJitterSection.innerHTML = `
+          
+          <iframe name="votar" style="display:none;"></iframe>
+          <form id="updateImageForm" class="is-centered " target = "votar"  >
+          </br>
+
+
+
+          </form>
+          
+          
+          
+          
+          `
+        })
+
     })
     .catch(e => {
       console.error(e)
     })
 }
+
+
 
 const logoutLink = document.getElementById('logout')
 const logout = _ => {

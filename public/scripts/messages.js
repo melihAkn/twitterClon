@@ -18,7 +18,7 @@ const searchUserButton = document.getElementById('searchUser')
 
 searchUserButton.addEventListener('click', _ => {
     console.log(searchUserInput.textContent)
-    const searchUserURL = "/searchUser"
+    const searchUserURL = "user/searchUser"
     fetch(searchUserURL,{
         method : "POST",
         headers : {

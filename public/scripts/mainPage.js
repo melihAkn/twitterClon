@@ -1,25 +1,6 @@
-const getUserTokenURL = "/user/getUserToken";
 let token;
-//redirecting user if login credentials are wrong
-//because some times in backend res.redirect('/) doesn't work I dont know why
-const getUserToken =async _ => {
-    fetch(getUserTokenURL)
-    .then(response => {
-        if(response.redirected == true){
-            document.location.href = "/login"
-            return
-        }else{
-            return response.json()
-        }
-    })
-    .then(data => {
-        if(data.token == undefined){
-            document.location.href = "/login"
-        }
-        token = data.token;
-    })
-    .catch(e => console.log(e));
-}
+
+
 const getAllTweetsURL = "/user/getAllJitters";
 const sendTweetButton = document.getElementById('sendTweetButton');
 const getJitters = (url = "/user/getAllJitters") => {
@@ -421,7 +402,6 @@ sendTweetButton.addEventListener('click',sendJitter);
 logoutLink.addEventListener('click',logout)
 
 document.addEventListener('DOMContentLoaded',async function(){
-    await getUserToken()
     const getAllTweetsURL = "/user/getAllJitters"
     getJitters(getAllTweetsURL)
     suggestedUsers()

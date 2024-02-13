@@ -19,7 +19,6 @@ const getUserToken = (req,res) => {
         if(tokenIsValid){
             res.send({token : token, tokenFound : true});
         }
-         
     } catch (error) {
         res.status(401).redirect("/login");
     }

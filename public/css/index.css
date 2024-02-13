@@ -3,3 +3,172 @@
 .loginForm {
     width: 400px;
 }
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  #wrapper {
+    display: flex;
+    min-height: 100vh;
+}
+
+#sidebar {
+    width: 200px;
+    padding: 10px;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    background-color: gray;
+}
+
+#sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#sidebar ul li {
+    padding: 5px;
+    margin-bottom: 5px;
+    border-bottom: 1px solid #ddd;
+}
+
+#sidebar ul li a {
+    text-decoration: none;
+    color: #333;
+}
+
+#content {
+    flex: 1;
+    padding: 10px;
+    margin-left: 200px; /* Sol kenar boşluğu sidebar genişliğine eşit */
+}
+
+  
+  .followButton{
+    float: right;
+  }
+  
+  .firstBlanArea
+  {
+    width: 10%;
+    float: left;
+    height: 100px;
+    
+  }
+  
+  .userActions
+  {
+    width: 15%;
+    float: left;
+    height: 100px;
+    
+  }
+  
+  .tweetAndTimeline
+  {
+    width: 50%;
+    float: left;
+    height: 100px;
+    
+  }
+  
+  .suggestedUsers
+  {
+    width: 15%;
+    float: left;
+    height: 100px;
+    
+  }
+  
+  .lastBlankArea
+  {
+    width: 10%;
+    float: left;
+    height: 100px;
+    
+  }
+  .mainPageHref{
+      float: left;
+  }
+  .followersTweetHref{
+      float: right;
+  }
+  
+  .userImage:hover,
+  .jitterUsername:hover,
+  .jitterUsernameButSpclChrt:hover,
+  .imageOfUser:hover,
+  .usernameOfUser:hover,
+  .userProfilePicture:hover
+   {
+    cursor: pointer;
+  }
+  
+  #chat-container {
+    display: flex;
+    width: 900px;
+    height:  600px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  #user-list {
+    width: 25%;
+    padding: 5px;
+    border-right: 1px solid #ccc;
+  }
+  
+  .user {
+    padding: 10px;
+    margin-bottom: 5px;
+    cursor: pointer;
+  }
+  
+  #chat {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  #selected-user {
+    padding: 10px;
+    background-color: #f2f2f2;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  #messages {
+    flex: 1;
+    overflow-y: scroll;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  #message-input {
+    padding: 8px;
+    margin: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  button {
+    padding: 5px;
+    margin: 5px;
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #45a049;
+  }

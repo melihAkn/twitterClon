@@ -1,6 +1,22 @@
 const {Router} = require('express');
 const controller = require('../controller/userController');
 const userRouter = Router();
+/*
+const multer = require('multer');
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        if (!fs.existsSync('uploads')) {
+            fs.mkdirSync('uploads');
+          }
+      cb(null, 'uploads/')
+    },
+    filename: function (req, file, cb) {
+      cb(null, Date.now() + '-' + file.originalname)
+    }
+  });
+  const upload = multer({ storage: storage });
+*/
 //jwt control middleware
 const tokenAuthForAllRoutes =require('../middleware/tokenAuthForAllRoutes')
 userRouter.get('/username',tokenAuthForAllRoutes,controller.getUsername);
